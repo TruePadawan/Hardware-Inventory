@@ -3,5 +3,6 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src=process.env.BROWSER_REFRESH_URL)
   body
     block content
