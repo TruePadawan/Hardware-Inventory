@@ -1,9 +1,8 @@
 const router = require("express").Router();
+const HardwareTypeController = require("../controllers/HardwareTypeController");
 
 // GET list of hardware types
-router.get("/", function (req, res) {
-	res.send("ROUTE NOT SET: GET /hardware_types/");
-});
+router.get("/", HardwareTypeController.get_hardware_types);
 
 // GET request to create hardware type
 router.get("/add", function (req, res) {
