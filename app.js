@@ -11,6 +11,14 @@ const hardwareRouter = require("./routes/hardware");
 
 const app = express();
 
+// Mongoose Setup
+const mongoose = require("mongoose");
+main().catch((err) => console.log(err));
+async function main() {
+	const connectionString = process.env.MONGODB_CONNECT_STR;
+	await mongoose.connect(connectionString);
+}
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
