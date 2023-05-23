@@ -17,3 +17,7 @@ block content
                 label(for='img_file') Image
                 input#img_file.my-input(type='file' name='img_file')
             button.my-button.brown(type='submit') Create
+        if errors
+            ul
+                for error in errors
+                    li.text-danger!= error.msg
