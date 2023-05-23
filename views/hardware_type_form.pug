@@ -4,7 +4,9 @@ block css
 block content
     body
         form.d-flex.flex-column.align-items-stretch.gap-3(method='POST' action='/hardware_types/new')
-            h2 Create Hardware Type
+            div
+                h2.my-0 Create Hardware Type
+                p.my-0.fs-6.text-info.text-center * means the information must be supplied
             .d-flex.flex-column
                 label(for='name') Name*
                 input#name.my-input(type='text' name='name' placeholder='Graphics Cards' maxlength='40' required='')
