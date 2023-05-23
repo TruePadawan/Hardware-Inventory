@@ -5,13 +5,13 @@ const HardwareTypeController = require("../controllers/HardwareTypeController");
 router.get("/", HardwareTypeController.get_hardware_types);
 
 // GET request to create hardware type
-router.get("/add", function (req, res) {
-	res.send("ROUTE NOT SET: GET /hardware_types/add");
+router.get("/new", function (req, res) {
+	res.send("ROUTE NOT SET: GET /hardware_types/new");
 });
 
 // POST request to create hardware type
-router.post("/add", function (req, res) {
-	res.send("ROUTE NOT SET: POST /hardware_types/add");
+router.post("/new", function (req, res) {
+	res.send("ROUTE NOT SET: POST /hardware_types/new");
 });
 
 // GET request to show hardware type details
@@ -20,13 +20,13 @@ router.get("/:hardwareTypeID", function (req, res) {
 });
 
 // GET request to add hardware under a hardware type
-router.get("/:hardwareTypeID/add_hardware", function (req, res) {
-	res.send("ROUTE NOT SET: GET /hardware_types/:hardwareTypeID/add_hardware");
+router.get("/:hardwareTypeID/new_hardware", function (req, res) {
+	res.send("ROUTE NOT SET: GET /hardware_types/:hardwareTypeID/new_hardware");
 });
 
 // POST request to add hardware under a hardware type
-router.post("/:hardwareTypeID/add_hardware", function (req, res) {
-	res.send("ROUTE NOT SET: POST /hardware_types/:hardwareTypeID/add_hardware");
+router.post("/:hardwareTypeID/new_hardware", function (req, res) {
+	res.send("ROUTE NOT SET: POST /hardware_types/:hardwareTypeID/new_hardware");
 });
 
 // GET request to edit hardware type
