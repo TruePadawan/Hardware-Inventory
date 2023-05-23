@@ -1,0 +1,24 @@
+body {
+    min-height: 100vh;
+    background: rgb(29, 29, 29);
+    color: white;
+    font-family: "Neucha", cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h1 {
+    font-family: "Permanent Marker", cursive;
+}
+
+h1 a,
+h1 a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+footer {
+    color: rgb(169, 169, 169);
+}
