@@ -1,0 +1,14 @@
+.create-hardware {
+    background-color: rgba(118, 118, 118, 0.13);
+    padding: 1.5rem 3rem;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.create-hardware:hover {
+    background-color: rgba(134, 134, 134, 0.13);
+}
+
+.create-hardware:active {
+    background-color: rgba(95, 95, 95, 0.13);
+}
