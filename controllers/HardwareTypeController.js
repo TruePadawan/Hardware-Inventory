@@ -51,7 +51,7 @@ exports.create_hardware_type_post = [
 		.trim()
 		.isLength({ min: 1, max: 40 })
 		.withMessage("Name must not exceed 40 characters")
-		.isAlphanumeric()
+		.isAlphanumeric("en-GB", { ignore: "\s" })
 		.withMessage("Name must be alphanumeric")
 		.escape(),
 	body("desc", "Description is required")
