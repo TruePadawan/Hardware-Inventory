@@ -1,0 +1,17 @@
+extends layout 
+block css
+    link(rel='stylesheet', href='/stylesheets/form.css')
+block content
+    body
+        form.d-flex.flex-column.align-items-stretch.gap-3(method='POST' action='/hardware_types/new')
+            h2 Create Hardware Type
+            .d-flex.flex-column
+                label(for='name') Name*
+                input#name.my-input(type='text' name='name' placeholder='Graphics Cards' maxlength='40' required='')
+            .d-flex.flex-column
+                label(for='desc') Description*
+                textarea#desc.my-input(rows='6' name='desc' required='')
+            .d-flex.flex-column
+                label(for='img_file') Image
+                input#img_file.my-input(type='file' name='img_file')
+            button.my-button.brown(type='submit') Create

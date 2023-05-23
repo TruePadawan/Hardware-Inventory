@@ -1,0 +1,52 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+form {
+    width: min(95%, 400px);
+}
+
+form h2 {
+    font-size: 2.2rem;
+    text-align: center;
+}
+
+form label {
+    font-size: 28px;
+}
+
+form input {
+    height: 48px;
+    padding: 4px 2px;
+}
+
+form textarea {
+    padding: 2px;
+}
+
+form input,
+form textarea {
+    font-size: large;
+    color: white;
+    background-color: rgb(55, 55, 55);
+    border: 3px solid rgb(173, 84, 19);
+    border-radius: 6px;
+    outline: none;
+}
+
+form input::-moz-placeholder {
+    color: rgb(140, 140, 140);
+}
+
+form input::placeholder {
+    color: rgb(140, 140, 140);
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: rgb(230, 112, 28);
+}
