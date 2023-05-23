@@ -3,22 +3,69 @@ body {
     background: rgb(29, 29, 29);
     color: white;
     font-family: "Neucha", cursive;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    color: inherit;
+}
+
+.icons-8 {
+    color: rgb(173, 84, 19);
+}
+
+.icons-8:hover {
+    color: rgb(139, 67, 16);
 }
 
 h1 {
     font-family: "Permanent Marker", cursive;
 }
 
-h1 a,
-h1 a:hover {
-    color: white;
-    text-decoration: none;
-}
-
 footer {
     color: rgb(169, 169, 169);
+}
+
+.my-button {
+    font-size: 22px;
+    text-align: center;
+    padding: 10px 12px;
+    width: min(400px, 100%);
+    border-radius: 4px;
+    color: white;
+    background-color: rgb(54, 54, 54);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.my-button:hover {
+    color: white;
+    background-color: rgb(43, 42, 42);
+}
+
+.my-button.brown {
+    background-color: rgb(173, 84, 19);
+}
+
+.my-button.brown:hover {
+    background-color: rgb(141, 68, 15);
+}
+
+.my-button.purple {
+    background-color: rgb(151, 71, 255);
+}
+
+.my-button.purple:hover {
+    background-color: rgb(133, 62, 226);
+}
+
+.my-button.red {
+    background-color: rgb(173, 19, 19);
+}
+
+.my-button.red:hover {
+    background-color: rgb(143, 14, 14);
 }

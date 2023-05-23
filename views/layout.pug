@@ -13,11 +13,13 @@ html(lang='en')
     script(src=process.env.BROWSER_REFRESH_URL)
     block css
   body.py-2.px-4
-    header
+    header.d-flex.flex-column.align-items-center.gap-4
       h1.text-center
         a(href='/') HARDWARE INVENTORY
+      if show_home_button === true
+        a(href='/', class='my-button') View all Hardware Types
     block content
     footer.fs-4.text-center
       | Icons and Images gotten from 
-      a(href='https://icons8.com/', target='_blank') Icons8
+      a(class='icons-8', href='https://icons8.com/', target='_blank') Icons8
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js', integrity='sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V', crossorigin='anonymous')
