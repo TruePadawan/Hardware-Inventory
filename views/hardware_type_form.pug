@@ -9,7 +9,7 @@ block content
                 p.my-0.fs-6.text-info.text-center * means the information must be supplied
             .d-flex.flex-column
                 label(for='name') Name*
-                input#name.my-input(type='text' name='name' placeholder='Graphics Cards' maxlength='40' required='' value=hardware_type===undefined? "" : hardware_type.name)
+                input#name.my-input(type='text' name='name' autofocus placeholder='Graphics Cards' maxlength='40' required='' value=hardware_type===undefined? "" : hardware_type.name)
             .d-flex.flex-column
                 label(for='desc') Description*
                 textarea#desc.my-input(rows='6' name='desc' required='')=hardware_type===undefined? "" : hardware_type.desc
