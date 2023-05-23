@@ -61,7 +61,7 @@ exports.create_hardware_type_post = [
 		.escape(),
 	asyncHandler(async function (req, res) {
 		const errors = validationResult(req);
-		const { name, desc } = matchedData(req);
+		const { name, desc } = req.body;
 		const hardwareType = new HardwareType({ name, desc });
 
 		if (errors.isEmpty() === false) {
