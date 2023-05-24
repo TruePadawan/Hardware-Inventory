@@ -1,10 +1,19 @@
 extends layout
 
 block css
-  link(rel='stylesheet', href='/stylesheets/index.css')
+  if hardware_types.length > 0
+    link(rel='stylesheet' href='/stylesheets/index.css')
+  else
+    link(rel='stylesheet' href='/stylesheets/index-no-hardware-type.css')
+
 block content
   if hardware_types.length > 0
-    p TODO
+    main.flex-grow-1.hardware-type-list
+      a(href='/hardware_types/new' class='create-category text-white d-flex flex-column align-items-center gap-3')
+        img(src='/icons/pencil_100px.png' alt='pencil')
+        p.fs-4.text-center Create Category
+      for hardware_type in hardware_types
+        a.hardware-type-item.fs-4(href=`/hardware_types/${hardware_type._id}`)=hardware_type.name
   else
     main.d-flex.justify-content-center.align-items-center
       a.create-hardware.text-white.d-flex.flex-column.align-items-center.gap-3(href='/hardware_types/new')
