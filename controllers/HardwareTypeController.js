@@ -1,5 +1,5 @@
 const HardwareType = require("../models/HardwareType");
-const { body, validationResult, matchedData } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 
 /* HANDLING POST REQUESTS FROM FORMS
