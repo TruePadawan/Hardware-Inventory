@@ -1,22 +1,47 @@
 body {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-between;
-    gap: .5rem;
+    gap: 1rem;
 }
 
-.create-hardware {
-    background-color: rgba(118, 118, 118, 0.13);
-    padding: 1.5rem 3rem;
+.create-category,
+.hardware-type-item {
+    padding: 4px 0;
+    max-width: 240px;
+    max-height: 160px;
+    width: 100%;
+    height: 160px;
     border-radius: 8px;
-    text-decoration: none;
 }
 
-.create-hardware:hover {
-    background-color: rgba(134, 134, 134, 0.13);
+.create-category {
+    background-color: rgb(118, 118, 118);
 }
 
-.create-hardware:active {
-    background-color: rgba(95, 95, 95, 0.13);
+.create-category:hover {
+    background-color: rgb(95, 94, 94);
+}
+
+.create-category p {
+    margin: 0;
+}
+
+.hardware-type-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+    align-content: flex-start;
+}
+
+.hardware-type-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(173, 84, 19);
+}
+
+.hardware-type-item:hover {
+    background-color: rgb(155, 75, 17);
 }
