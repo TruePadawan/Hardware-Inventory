@@ -3,7 +3,7 @@ block css
     link(rel='stylesheet' href='/stylesheets/form.css')
 block content
     body
-        form.d-flex.flex-column.align-items-stretch.gap-3(method='POST' action='/hardware_types/new')
+        form.d-flex.flex-column.align-items-stretch.gap-3(method='POST' action='/hardware_types/new' enctype='multipart/form-data')
             div
                 h2.my-0 Create Hardware Type
                 p.my-0.fs-6.text-info.text-center * means the information must be supplied
@@ -15,7 +15,7 @@ block content
                 textarea#desc.my-input(rows='6' name='desc' required='')=hardware_type===undefined? "" : hardware_type.desc
             .d-flex.flex-column
                 label(for='img_file') Image
-                input#img_file.my-input(type='file' name='img_file')
+                input#img_file.my-input(type='file' name='img_file' accept='image/*')
             button.my-button.brown(type='submit') Create
         if errors
             ul
