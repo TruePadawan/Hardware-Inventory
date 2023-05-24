@@ -14,7 +14,7 @@ const asyncHandler = require("express-async-handler");
 
 // Display all hardware categories
 exports.get_hardware_types = function (req, res, next) {
-	HardwareType.find({}, { desc: -1 })
+	HardwareType.find({}, "name")
 		.exec()
 		.then((allHardwareTypes) => {
 			res.render("index", {
@@ -51,6 +51,7 @@ exports.create_hardware_type_post = [
 		.trim()
 		.isLength({ min: 1, max: 40 })
 		.withMessage("Name must not exceed 40 characters")
+		// Formatting removes the slash
 		.isAlphanumeric("en-GB", { ignore: "\s" })
 		.withMessage("Name must be alphanumeric")
 		.escape(),
