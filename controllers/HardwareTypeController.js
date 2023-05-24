@@ -78,6 +78,11 @@ exports.create_hardware_type_post = [
 			// Delete uploaded file if its not really an image.
 			await unlink(file.path);
 			throw new Error("Selected file is not an Image");
+		} else {
+			if (file.size / 1000 > 1024) {
+				await unlink(file.path);
+				throw new Error("Image must be less than 1MB");
+			}
 		}
 	}),
 	// prettier-ignore

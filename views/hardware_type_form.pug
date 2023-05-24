@@ -15,6 +15,7 @@ block content
                 textarea#desc.my-input(rows='6' name='desc' required='')=hardware_type===undefined? "" : hardware_type.desc
             .d-flex.flex-column
                 label(for='img_file') Image
+                    span.fs-6.text-info  (<= 1MB in size)
                 input#img_file.my-input(type='file' name='img_file' accept='image/*')
             button.my-button.brown(type='submit') Create
         if errors
