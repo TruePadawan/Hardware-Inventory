@@ -24,12 +24,16 @@ router.post("/:hardwareTypeID/new_hardware", function (req, res) {
 });
 
 // GET request to edit hardware type
-router.get("/:hardwareTypeID/edit", HardwareTypeController.edit_hardware_type_get);
+router.get(
+	"/:hardwareTypeID/edit",
+	HardwareTypeController.edit_hardware_type_get
+);
 
 // POST request to edit hardware type
-router.post("/:hardwareTypeID/edit", function (req, res) {
-	res.send("ROUTE NOT SET: POST /hardware_types/:hardwareTypeID/edit");
-});
+router.post(
+	"/:hardwareTypeID/edit",
+	HardwareTypeController.edit_hardware_type_post
+);
 
 // GET request to delete hardware type
 router.get("/:hardwareTypeID/delete", function (req, res) {

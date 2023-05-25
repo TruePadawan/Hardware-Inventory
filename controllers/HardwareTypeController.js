@@ -64,7 +64,7 @@ exports.create_hardware_type_post = [
 	upload.single("img_file"),
 	// Put the file in req.body so that express-validator can access it.
 	function (req, res, next) {
-		if (req.body.file) {
+		if (req.file !== undefined) {
 			req.body.img_file = req.file;
 		}
 		next();
@@ -110,7 +110,7 @@ exports.create_hardware_type_post = [
 		const hardwareType = new HardwareType({
 			name,
 			desc,
-			img_filename: img_file !== undefined ? img_file.filename : "",
+			img_filename: img_file !== undefined ? img_file.filename : undefined,
 		});
 		if (errors.isEmpty() === false) {
 			res.render("hardware_type_form", {
@@ -160,3 +160,101 @@ exports.edit_hardware_type_get = asyncHandler(async function (req, res) {
 		throw new Error("Hardware Type not found!");
 	}
 });
+
+/*
+	If hardware_type document has image and new image is selected and validated
+		delete the former image after updating document
+*/
+exports.edit_hardware_type_post = [
+	upload.single("img_file"),
+	// Put the file in req.body so that express-validator can access it.
+	function (req, res, next) {
+		if (req.file !== undefined) {
+			req.body.img_file = req.file;
+		}
+		next();
+	},
+
+	// Verify that uploaded file is really an image using a custom validator
+	body("img_file")
+		.optional()
+		.custom(async function (file) {
+			const { default: imageType, minimumBytes } = await import("image-type");
+			const { readChunk } = await import("read-chunk");
+			const buffer = await readChunk(file.path, { length: minimumBytes });
+			const isImage = (await imageType(buffer)) !== false;
+			if (isImage === false) {
+				// Delete uploaded file if its not really an image.
+				await unlink(file.path);
+				throw new Error("Selected file is not an Image");
+			} else {
+				if (file.size / 1000 > 1024) {
+					await unlink(file.path);
+					throw new Error("Image must be less than 1MB");
+				}
+			}
+		}),
+	// prettier-ignore
+	body("name")
+		.exists({ values: "falsy" })
+		.withMessage("Name is required")
+		.trim()
+		.isLength({ min: 1, max: 40 })
+		.withMessage("Name must not exceed 40 characters")
+		// Formatting removes the slash, the prettier-ignore above prevents that
+		.isAlphanumeric("en-GB", { ignore: "\s" })
+		.withMessage("Name must be alphanumeric")
+		.escape(),
+	body("desc", "Description is required")
+		.exists({ values: "falsy" })
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("password", "Password is wrong!")
+		.escape()
+		.equals(process.env.ADMIN_PASSWORD),
+
+	asyncHandler(async function (req, res) {
+		const errors = validationResult(req);
+		const { name, desc, img_file } = req.body;
+
+		const { hardwareTypeID } = req.params;
+		const imageSelected = img_file !== undefined;
+		req.body.imageSelected = imageSelected;
+
+		const hardwareType = new HardwareType({
+			name,
+			desc,
+			img_filename: imageSelected ? img_file.filename : undefined,
+			_id: hardwareTypeID,
+		});
+		if (errors.isEmpty() === false) {
+			// Delete any uploaded image if any error occurs with form validation
+			if (img_file) {
+				await unlink(img_file.path);
+			}
+
+			res.render("edit_hardware_type_form", {
+				title: "Edit Hardware Type",
+				hardware_type: hardwareType,
+				errors: errors.array(),
+			});
+		} else {
+			// If no error with form data and update query, and document has former image, Delete the now unused image file from disk
+			const oldHardwareType = await HardwareType.findById(
+				hardwareTypeID,
+				"img_filename"
+			).exec();
+
+			await HardwareType.findByIdAndUpdate(hardwareTypeID, hardwareType).exec();
+
+			const hasPreviousImage =
+				imageSelected === true && oldHardwareType.img_filename !== undefined;
+			if (hasPreviousImage) {
+				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareType.image_url}`;
+				await unlink(oldImgFilePath);
+			}
+			res.redirect(hardwareType.route_url);
+		}
+	}),
+];
