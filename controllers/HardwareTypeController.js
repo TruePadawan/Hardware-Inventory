@@ -151,8 +151,12 @@ exports.edit_hardware_type_get = asyncHandler(async function (req, res) {
 		"name desc"
 	).exec();
 
-	res.render("edit_hardware_type_form", {
-		title: "Edit Hardware Type",
-		hardware_type: hardwareType,
-	});
+	if (hardwareType) {
+		res.render("edit_hardware_type_form", {
+			title: "Edit Hardware Type",
+			hardware_type: hardwareType,
+		});
+	} else {
+		throw new Error("Hardware Type not found!");
+	}
 });
