@@ -1,24 +1,24 @@
 extends layout 
 block css
-    link(rel='stylesheet' href='/stylesheets/form.css')
+  link(rel='stylesheet' href='/stylesheets/form.css')
 block content
-    body
-        form.d-flex.flex-column.align-items-stretch.gap-3(method='POST' action='/hardware_types/new' enctype='multipart/form-data')
-            div
-                h2.my-0 Create Hardware Type
-                p.my-0.fs-6.text-info.text-center * means the information must be supplied
-            .d-flex.flex-column
-                label(for='name') Name*
-                input#name.my-input(type='text' name='name' autofocus placeholder='Graphics Cards' maxlength='40' required='' value=hardware_type===undefined? "" : hardware_type.name)
-            .d-flex.flex-column
-                label(for='desc') Description*
-                textarea#desc.my-input(rows='6' name='desc' required='')=hardware_type===undefined? "" : hardware_type.desc
-            .d-flex.flex-column
-                label(for='img_file') Image
-                    span.fs-6.text-info  (<= 1MB in size)
-                input#img_file.my-input(type='file' name='img_file' accept='image/*')
-            button.my-button.brown(type='submit') Create
-        if errors
-            ul
-                for error in errors
-                    li.text-danger!= error.msg
+  body
+    form.d-flex.flex-column.align-items-stretch.gap-3(method='POST' action='/hardware_types/new' enctype='multipart/form-data')
+      div
+        h2.my-0 Create Hardware Type
+        p.my-0.fs-6.text-info.text-center * means the information must be supplied
+      .d-flex.flex-column
+        label(for='name') Name*
+        input#name.my-input(type='text' name='name' autofocus placeholder='Graphics Cards' maxlength='40' required='' value=hardware_type===undefined? "" : hardware_type.name)
+      .d-flex.flex-column
+        label(for='desc') Description*
+        textarea#desc.my-input(rows='6' name='desc' required='')=hardware_type===undefined? "" : hardware_type.desc
+      .d-flex.flex-column
+        label(for='img_file') Image
+          span.fs-6.text-info  (<= 1MB in size)
+        input#img_file.my-input(type='file' name='img_file' accept='image/*')
+      button.my-button.brown(type='submit') Create
+    if errors
+      ul
+        for error in errors
+          li.text-danger!= error.msg
