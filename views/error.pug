@@ -1,10 +1,10 @@
 extends layout
 
 block css
-  link(rel='stylesheet', href='/stylesheets/index.css')
+	link(rel='stylesheet' href='/stylesheets/index.css')
 
 block content
-  div.text-center
-    h2= message
-    h3= error.status
-    pre #{error.stack}
+	div.text-center
+		h2= message
+		h3= error.status
+		pre #{error.stack}
