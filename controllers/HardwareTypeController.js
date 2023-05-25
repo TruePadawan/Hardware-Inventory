@@ -113,6 +113,11 @@ exports.create_hardware_type_post = [
 			img_filename: img_file !== undefined ? img_file.filename : undefined,
 		});
 		if (errors.isEmpty() === false) {
+			// Delete any uploaded image if any error occurs with form validation
+			if (img_file) {
+				await unlink(img_file.path);
+			}
+
 			res.render("hardware_type_form", {
 				title: "Create Hardware Type",
 				hardware_type: hardwareType,
@@ -245,7 +250,7 @@ exports.edit_hardware_type_post = [
 				hardwareTypeID,
 				"img_filename"
 			).exec();
-
+			// Update hardware type document after storing its former data in a variable
 			await HardwareType.findByIdAndUpdate(hardwareTypeID, hardwareType).exec();
 
 			const hasPreviousImage =
