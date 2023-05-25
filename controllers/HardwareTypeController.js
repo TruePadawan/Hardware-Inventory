@@ -20,21 +20,19 @@ const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
 */
 
 // Display all hardware categories
-exports.get_hardware_types = function (req, res, next) {
-	HardwareType.find({}, "name img_filename")
-		.exec()
-		.then((allHardwareTypes) => {
-			res.render("index", {
-				title:
-					allHardwareTypes.length > 0
-						? "Hardware Types"
-						: "Create Hardware Type",
-				hardware_types: allHardwareTypes,
-				show_home_button: false,
-			});
-		})
-		.catch(next);
-};
+exports.get_hardware_types = asyncHandler(async function (req, res) {
+	const allHardwareTypes = await HardwareType.find(
+		{},
+		"name img_filename"
+	).exec();
+
+	res.render("index", {
+		title:
+			allHardwareTypes.length > 0 ? "Hardware Types" : "Create Hardware Type",
+		hardware_types: allHardwareTypes,
+		show_home_button: false,
+	});
+});
 
 // Display form for creating hardware type
 exports.create_hardware_type_get = function (req, res) {
@@ -148,7 +146,10 @@ exports.get_hardware_details = asyncHandler(async function (req, res, next) {
 
 exports.edit_hardware_type_get = asyncHandler(async function (req, res) {
 	const { hardwareTypeID } = req.params;
-	const hardwareType = await HardwareType.findById(hardwareTypeID, "name desc");
+	const hardwareType = await HardwareType.findById(
+		hardwareTypeID,
+		"name desc"
+	).exec();
 
 	res.render("edit_hardware_type_form", {
 		title: "Edit Hardware Type",
