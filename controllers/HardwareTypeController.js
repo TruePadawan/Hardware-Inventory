@@ -145,3 +145,13 @@ exports.get_hardware_details = asyncHandler(async function (req, res, next) {
 		throw new Error("Hardware Type not found!");
 	}
 });
+
+exports.edit_hardware_type_get = asyncHandler(async function (req, res) {
+	const { hardwareTypeID } = req.params;
+	const hardwareType = await HardwareType.findById(hardwareTypeID, "name desc");
+
+	res.render("edit_hardware_type_form", {
+		title: "Edit Hardware Type",
+		hardware_type: hardwareType,
+	});
+});
