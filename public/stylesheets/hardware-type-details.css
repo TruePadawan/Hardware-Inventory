@@ -1,0 +1,10 @@
+body {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.hardware-type-details .desc {
+    font-family: "Nova Slim", cursive;
+    color: rgb(220, 220, 220);
+}

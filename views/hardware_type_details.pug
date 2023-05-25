@@ -1,0 +1,23 @@
+extends layout 
+
+block css
+	link(rel='stylesheet' href='/stylesheets/hardware-type-details.css')
+block content
+	main.flex-grow-1.d-flex.flex-column.hardware-type-details
+		.my-3
+			.d-flex.justify-content-between.align-items-center.gap-2.flex-wrap
+				h2.my-0=hardware_type.name
+				.d-flex.gap-1.w-50
+					a.my-button.purple.w-auto.flex-grow-1(href=`${hardware_type._id}/edit`) Edit
+					a.my-button.red.w-auto.flex-grow-1(href=`${hardware_type._id}/delete`) Delete
+			p.fs-5.my-2.desc=hardware_type.desc
+		.flex-grow-1.d-flex.flex-column
+			.d-flex.justify-content-between.align-items-center.flex-wrap
+				p.fs-2.my-0 Hardware
+				a.my-button.brown(href=`${hardware_type._id}/new_hardware`) Add Hardware
+			if hardwares.length === 0
+				.flex-grow-1.d-flex.justify-content-center.align-items-center
+					.d-flex.flex-column.gap-1
+						img(src='/icons/nothing_found.png' alt='nothing found')
+						p.my-0.fs-4 No hardware
+			else

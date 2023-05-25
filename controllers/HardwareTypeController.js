@@ -1,4 +1,5 @@
 const HardwareType = require("../models/HardwareType");
+const Hardware = require("../models/Hardware");
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const path = require("node:path");
@@ -126,3 +127,17 @@ exports.create_hardware_type_post = [
 		}
 	}),
 ];
+
+exports.get_hardware_details = asyncHandler(async function (req, res, next) {
+	const { hardwareTypeID } = req.params;
+	const [hardwareType, hardwares] = await Promise.all([
+		HardwareType.findById(hardwareTypeID).exec(),
+		Hardware.find({ hardware_type: hardwareTypeID }).exec(),
+	]);
+	res.render("hardware_type_details", {
+		title: hardwareType.name,
+		show_home_button: true,
+		hardware_type: hardwareType,
+		hardwares,
+	});
+});
