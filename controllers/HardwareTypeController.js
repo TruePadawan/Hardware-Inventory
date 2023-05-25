@@ -20,7 +20,7 @@ const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware types` });
 
 // Display all hardware categories
 exports.get_hardware_types = function (req, res, next) {
-	HardwareType.find({}, "name")
+	HardwareType.find({}, "name img_filename")
 		.exec()
 		.then((allHardwareTypes) => {
 			res.render("index", {
