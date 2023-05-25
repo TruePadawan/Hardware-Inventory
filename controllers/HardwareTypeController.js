@@ -263,3 +263,18 @@ exports.edit_hardware_type_post = [
 		}
 	}),
 ];
+
+exports.delete_hardware_type_get = asyncHandler(async function (req, res) {
+	const hardwareType = await HardwareType.findById(
+		req.params.hardwareTypeID,
+		""
+	).exec();
+	if (hardwareType === null) {
+		throw new Error("Can't find any Hardware Type with the specified ID");
+	}
+	res.render("delete_hardware_type_form", {
+		title: "Delete Hardware Type",
+		show_home_button: false,
+		hardware_type: hardwareType,
+	});
+});

@@ -36,9 +36,10 @@ router.post(
 );
 
 // GET request to delete hardware type
-router.get("/:hardwareTypeID/delete", function (req, res) {
-	res.send("ROUTE NOT SET: GET /hardware_types/:hardwareTypeID/delete");
-});
+router.get(
+	"/:hardwareTypeID/delete",
+	HardwareTypeController.delete_hardware_type_get
+);
 
 // POST request to delete hardware type
 router.post("/:hardwareTypeID/delete", function (req, res) {
