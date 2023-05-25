@@ -6,7 +6,7 @@ const multer = require("multer");
 const { unlink } = require("node:fs/promises");
 
 const PUBLIC_DIR = path.normalize(`${__dirname}/../public`);
-const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware types` });
+const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
 
 /* HANDLING POST REQUESTS FROM FORMS
 	For POST requests from forms, the user supplied data is sanitized and validated.
