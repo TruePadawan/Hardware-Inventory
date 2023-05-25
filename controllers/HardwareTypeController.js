@@ -134,10 +134,14 @@ exports.get_hardware_details = asyncHandler(async function (req, res, next) {
 		HardwareType.findById(hardwareTypeID).exec(),
 		Hardware.find({ hardware_type: hardwareTypeID }).exec(),
 	]);
-	res.render("hardware_type_details", {
-		title: hardwareType.name,
-		show_home_button: true,
-		hardware_type: hardwareType,
-		hardwares,
-	});
+	if (hardwareType) {
+		res.render("hardware_type_details", {
+			title: hardwareType.name,
+			show_home_button: true,
+			hardware_type: hardwareType,
+			hardwares,
+		});
+	} else {
+		throw new Error("Hardware Type not found!");
+	}
 });
