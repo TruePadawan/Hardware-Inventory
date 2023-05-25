@@ -65,26 +65,30 @@ exports.create_hardware_type_post = [
 	upload.single("img_file"),
 	// Put the file in req.body so that express-validator can access it.
 	function (req, res, next) {
-		req.body.img_file = req.file;
+		if (req.body.file) {
+			req.body.img_file = req.file;
+		}
 		next();
 	},
 	// Verify that uploaded file is really an image using a custom validator
-	body("img_file").custom(async function (file) {
-		const { default: imageType, minimumBytes } = await import("image-type");
-		const { readChunk } = await import("read-chunk");
-		const buffer = await readChunk(file.path, { length: minimumBytes });
-		const isImage = (await imageType(buffer)) !== false;
-		if (isImage === false) {
-			// Delete uploaded file if its not really an image.
-			await unlink(file.path);
-			throw new Error("Selected file is not an Image");
-		} else {
-			if (file.size / 1000 > 1024) {
+	body("img_file")
+		.optional()
+		.custom(async function (file) {
+			const { default: imageType, minimumBytes } = await import("image-type");
+			const { readChunk } = await import("read-chunk");
+			const buffer = await readChunk(file.path, { length: minimumBytes });
+			const isImage = (await imageType(buffer)) !== false;
+			if (isImage === false) {
+				// Delete uploaded file if its not really an image.
 				await unlink(file.path);
-				throw new Error("Image must be less than 1MB");
+				throw new Error("Selected file is not an Image");
+			} else {
+				if (file.size / 1000 > 1024) {
+					await unlink(file.path);
+					throw new Error("Image must be less than 1MB");
+				}
 			}
-		}
-	}),
+		}),
 	// prettier-ignore
 	body("name")
 		.exists({ values: "falsy" })
