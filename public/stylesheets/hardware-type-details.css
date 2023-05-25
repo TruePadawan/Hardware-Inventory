@@ -4,7 +4,17 @@ body {
     gap: .5rem;
 }
 
+main {
+    padding: 0 1rem;
+}
+
 .hardware-type-details .desc {
     font-family: "Nova Slim", cursive;
     color: rgb(220, 220, 220);
+}
+
+@media screen and (max-width: 640px) {
+    main {
+        padding: 0;
+    }
 }
