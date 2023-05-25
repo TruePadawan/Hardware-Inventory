@@ -20,7 +20,7 @@ block content
 				input#img_file.my-input(type='file' name='img_file' accept='image/*')
 			.d-flex.flex-column
 				label(for='password') Admin Password*
-				input#password.my-input(type='password' name='password')
+				input#password.my-input(type='password' name='password' required)
 			button.my-button.purple(type='submit') Edit
 			a.my-button.red(href=hardware_type.route_url) Cancel
 		if errors
