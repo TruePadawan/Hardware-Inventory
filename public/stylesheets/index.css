@@ -56,6 +56,7 @@ body {
 
 .hardware-type-item.has-image img {
     width: 100%;
+    height: 100%;
     transition: scale 0.5s;
     filter: blur(1.2px);
 }
