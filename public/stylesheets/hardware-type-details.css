@@ -13,6 +13,10 @@ main {
     color: rgb(220, 220, 220);
 }
 
+#no-hardware-icon {
+    width: 100px;
+}
+
 @media screen and (max-width: 640px) {
     main {
         padding: 0;

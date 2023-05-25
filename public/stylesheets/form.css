@@ -7,6 +7,10 @@ body {
 }
 
 form {
+    max-width: 95%;
+}
+
+form.create-hardware-type-form {
     width: min(95%, 400px);
 }
 

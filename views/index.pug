@@ -11,7 +11,7 @@ block content
 		main.flex-grow-1.hardware-type-list
 			a(href='/hardware_types/new' class='create-category text-white d-flex flex-column align-items-center gap-3')
 				img(src='/icons/pencil_100px.png' alt='pencil')
-				p.fs-4.text-center Create Category
+				p.fs-4.text-center Create Hardware Type
 			for hardware_type in hardware_types
 				if hardware_type.img_filename
 					a.hardware-type-item.has-image.fs-4(href=hardware_type.route_url)
