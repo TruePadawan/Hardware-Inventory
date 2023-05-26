@@ -31,7 +31,6 @@ exports.get_hardware_types = asyncHandler(async function (req, res) {
 		title:
 			allHardwareTypes.length > 0 ? "Hardware Types" : "Create Hardware Type",
 		hardware_types: allHardwareTypes,
-		show_home_button: false,
 	});
 });
 
@@ -39,7 +38,6 @@ exports.get_hardware_types = asyncHandler(async function (req, res) {
 exports.create_hardware_type_get = function (req, res) {
 	res.render("hardware_type_form", {
 		title: "Create Hardware Type",
-		show_home_button: true,
 	});
 };
 
@@ -273,7 +271,6 @@ exports.delete_hardware_type_get = asyncHandler(async function (req, res) {
 	}
 	res.render("delete_hardware_type_form", {
 		title: "Delete Hardware Type",
-		show_home_button: false,
 		hardware_type: hardwareType,
 	});
 });
