@@ -17,7 +17,9 @@ block content
 				label(for='img_file') Image
 					span.fs-6.text-info  (<= 1MB in size)
 				input#img_file.my-input(type='file' name='img_file' accept='image/*')
-			button.my-button.brown(type='submit') Create
+			.d-flex.flex-column.gap-2.align-items-stretch
+				button.my-button.brown(type='submit') Create
+				a.my-button.red(href='/') Cancel
 		if errors
 			ul
 				for error in errors
