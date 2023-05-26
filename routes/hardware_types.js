@@ -13,16 +13,6 @@ router.post("/new", HardwareTypeController.create_hardware_type_post);
 // GET request to show hardware type details
 router.get("/:hardwareTypeID", HardwareTypeController.get_hardware_details);
 
-// GET request to add hardware under a hardware type
-router.get("/:hardwareTypeID/new_hardware", function (req, res) {
-	res.send("ROUTE NOT SET: GET /hardware_types/:hardwareTypeID/new_hardware");
-});
-
-// POST request to add hardware under a hardware type
-router.post("/:hardwareTypeID/new_hardware", function (req, res) {
-	res.send("ROUTE NOT SET: POST /hardware_types/:hardwareTypeID/new_hardware");
-});
-
 // GET request to edit hardware type
 router.get(
 	"/:hardwareTypeID/edit",

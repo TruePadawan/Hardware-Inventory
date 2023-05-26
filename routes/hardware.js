@@ -9,6 +9,16 @@ router.get("/:hardwareID", function (req, res) {
 	res.send("ROUTE NOT SET: GET /hardware");
 });
 
+// GET request to add hardware under a hardware type
+router.get("/new", function (req, res) {
+	res.send("ROUTE NOT SET: GET /hardware/new");
+});
+
+// POST request to add hardware under a hardware type
+router.post("/new", function (req, res) {
+	res.send("ROUTE NOT SET: POST /hardware/new");
+});
+
 // GET request to delete hardware
 router.get("/:hardwareID/delete", function (req, res) {
 	res.send("ROUTE NOT SET: GET /hardware/:hardwareID/delete");
