@@ -10,17 +10,17 @@ block content
 				p.my-0.fs-6.text-danger.text-center Admin password is required for this action
 			.d-flex.flex-column
 				label(for='name') Name*
-				input#name.my-input(type='text' name='name' placeholder='Graphics Cards' maxlength='40' value=hardware_type.name autofocus required)
+				input#name(type='text' name='name' placeholder='Graphics Cards' maxlength='40' value=hardware_type.name autofocus required)
 			.d-flex.flex-column
 				label(for='desc') Description*
-				textarea#desc.my-input(rows='6' name='desc' required)=hardware_type.desc
+				textarea#desc(rows='6' name='desc' required)=hardware_type.desc
 			.d-flex.flex-column
 				label(for='img_file') Image
 					span.fs-6.text-info  (<= 1MB in size)
-				input#img_file.my-input(type='file' name='img_file' accept='image/*')
+				input#img_file(type='file' name='img_file' accept='image/*')
 			.d-flex.flex-column
 				label(for='password') Admin Password*
-				input#password.my-input(type='password' name='password' required)
+				input#password(type='password' name='password' required)
 			button.my-button.purple(type='submit') Edit
 			a.my-button.red(href=hardware_type.route_url) Cancel
 		if errors
