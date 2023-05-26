@@ -36,7 +36,7 @@ exports.get_hardware_types = asyncHandler(async function (req, res) {
 
 // Display form for creating hardware type
 exports.create_hardware_type_get = function (req, res) {
-	res.render("hardware_type_form", {
+	res.render("create_hardware_type_form", {
 		title: "Create Hardware Type",
 	});
 };
