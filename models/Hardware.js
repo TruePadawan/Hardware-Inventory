@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const HardwareSchema = new mongoose.Schema({
 	name: { required: true, type: String, maxLength: 100 },
-	desc: String,
+	desc: { required: true, type: String },
 	img_filename: String,
-	price_usd: { type: Number, required: true },
+	price_usd: { type: Number, required: true, default: 0 },
 	hardware_type: {
 		required: true,
 		ref: "HardwareType",
