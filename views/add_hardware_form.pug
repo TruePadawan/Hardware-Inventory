@@ -1,0 +1,37 @@
+extends layout 
+block css
+	link(rel='stylesheet' href='/stylesheets/form.css')
+block content
+	body
+		form.create-hardware-type-form.d-flex.flex-column.align-items-stretch.gap-3(method='POST' action='/hardware/new' enctype='multipart/form-data')
+			div
+				h2.my-0 Add Hardware
+				p.my-0.fs-6.text-info.text-center * means the information must be supplied
+			.d-flex.flex-column
+				label(for='name') Name*
+				input#name(type='text' name='name' placeholder='GTX 950' maxlength='100' value=hardware===undefined?"":hardware.name autofocus required)
+			.d-flex.flex-column
+				label(for='hardware_type') Hardware Type*
+				select#hardware_type(name='hardware_type')
+					for hardware_type in hardware_types
+						option(value=hardware_type._id)=hardware_type.name
+			.d-flex.flex-column
+				label(for='price') Price(USD)*
+				input#name(type='number' name='price' value=hardware===undefined?0:hardware.price_usd required)
+			.d-flex.flex-column
+				label(for='number_in_stock') Amount*
+				input#name(type='number' name='number_in_stock' value=hardware===undefined?0:hardware.number_in_stock required)
+			.d-flex.flex-column
+				label(for='desc') Description*
+				textarea#desc(rows='6' name='desc' required)=hardware===undefined?"":hardware.desc
+			.d-flex.flex-column
+				label(for='img_file') Image
+					span.fs-6.text-info  (<= 1MB in size)
+				input#img_file(type='file' name='img_file' accept='image/*')
+			.d-flex.flex-column.gap-2.align-items-stretch
+				button.my-button.brown(type='submit') Create
+				a.my-button.red(href='/') Cancel
+		if errors
+			ul
+				for error in errors
+					li.text-danger!= error.msg
