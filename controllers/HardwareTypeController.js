@@ -138,16 +138,15 @@ exports.get_hardware_details = asyncHandler(async function (req, res, next) {
 		HardwareType.findById(hardwareTypeID).exec(),
 		Hardware.find({ hardware_type: hardwareTypeID }).exec(),
 	]);
-	if (hardwareType) {
-		res.render("hardware_type_details", {
-			title: hardwareType.name,
-			show_home_button: true,
-			hardware_type: hardwareType,
-			hardwares,
-		});
-	} else {
+	if (hardwareType === null) {
 		throw new Error("Hardware Type not found!");
 	}
+	res.render("hardware_type_details", {
+		title: hardwareType.name,
+		show_home_button: true,
+		hardware_type: hardwareType,
+		hardwares,
+	});
 });
 
 exports.edit_hardware_type_get = asyncHandler(async function (req, res) {
@@ -157,14 +156,13 @@ exports.edit_hardware_type_get = asyncHandler(async function (req, res) {
 		"name desc"
 	).exec();
 
-	if (hardwareType) {
-		res.render("edit_hardware_type_form", {
-			title: "Edit Hardware Type",
-			hardware_type: hardwareType,
-		});
-	} else {
+	if (hardwareType === null) {
 		throw new Error("Hardware Type not found!");
 	}
+	res.render("edit_hardware_type_form", {
+		title: "Edit Hardware Type",
+		hardware_type: hardwareType,
+	});
 });
 
 /*
@@ -296,9 +294,13 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 			).exec();
 
 			// Store hardware_type image data for deletion after transaction is successful
-			const hardwareType = await HardwareType.findById(hardwareTypeID, "img_filename").exec();
-			if (hardwareType === null) throw new Error("Hardware Type not found");
-
+			const hardwareType = await HardwareType.findById(
+				hardwareTypeID,
+				"img_filename"
+			).exec();
+			if (hardwareType === null) {
+				throw new Error("Hardware Type not found");
+			}
 			hasImage = hardwareType.img_filename !== undefined;
 			imgFilePath = `${PUBLIC_DIR}${hardwareType.image_url}`;
 			await HardwareType.findByIdAndRemove(hardwareTypeID, { session }).exec();
