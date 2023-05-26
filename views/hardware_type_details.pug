@@ -14,7 +14,7 @@ block content
 		.flex-grow-1.d-flex.flex-column
 			.d-flex.justify-content-between.align-items-center.flex-wrap
 				p.fs-2.my-0 Hardware
-				a.my-button.brown(href=`${hardware_type._id}/new_hardware`) Add Hardware
+				a.my-button.brown(href='/hardware/new') Add Hardware
 			if hardwares.length === 0
 				.flex-grow-1.d-flex.justify-content-center.align-items-center
 					.d-flex.flex-column.gap-1
