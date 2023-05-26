@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 const path = require("node:path");
 const multer = require("multer");
 const { unlink } = require("node:fs/promises");
+const mongoose = require("mongoose");
 
 const PUBLIC_DIR = path.normalize(`${__dirname}/../public`);
 const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
@@ -277,4 +278,43 @@ exports.delete_hardware_type_get = asyncHandler(async function (req, res) {
 		show_home_button: false,
 		hardware_type: hardwareType,
 	});
+});
+
+// Setup a transaction that deletes all hardware under the hardware_type before deleting the hardware type and image if any
+exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
+	const { hardwareTypeID } = req.params;
+	const session = await mongoose.startSession();
+
+	try {
+		let hasImage = false;
+		let imgFilePath = "";
+
+		await session.withTransaction(async () => {
+			await Hardware.deleteMany(
+				{ hardware_type: hardwareTypeID },
+				{ session }
+			).exec();
+
+			// Store hardware_type image data for deletion after transaction is successful
+			const hardwareType = await HardwareType.findById(hardwareTypeID, "img_filename").exec();
+			if (hardwareType === null) throw new Error("Hardware Type not found");
+
+			hasImage = hardwareType.img_filename !== undefined;
+			imgFilePath = `${PUBLIC_DIR}${hardwareType.image_url}`;
+			await HardwareType.findByIdAndRemove(hardwareTypeID, { session }).exec();
+		});
+
+		await session.commitTransaction();
+		await session.endSession();
+		// Transaction completes with no error, delete image for the now deleted hardware_type
+		// TODO: Delete images from hardwares
+		if (hasImage) {
+			await unlink(imgFilePath);
+		}
+		res.redirect("/");
+	} catch (error) {
+		await session.abortTransaction();
+		await session.endSession();
+		throw error;
+	}
 });
