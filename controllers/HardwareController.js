@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const HardwareType = require("../models/HardwareType");
-const { ADD_HARDWARE_PAGE } = require("../utilities/helpers.mjs");
+const { ADD_HARDWARE_PAGE } = require("../utilities/helpers.js");
 
 exports.create_hardware_get = asyncHandler(async function (req, res) {
 	const allHardwareTypes = await HardwareType.find().exec();

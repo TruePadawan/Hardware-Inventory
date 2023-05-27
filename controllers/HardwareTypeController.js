@@ -13,7 +13,7 @@ const {
 	INDEX_PAGE,
 	EDIT_HARDWARE_TYPE_PAGE,
 	DELETE_HARDWARE_TYPE_PAGE,
-} = require("../utilities/helpers.mjs");
+} = require("../utilities/helpers.js");
 
 const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
 
