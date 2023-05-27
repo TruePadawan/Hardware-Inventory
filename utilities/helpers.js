@@ -46,7 +46,9 @@ exports.createHardwareTypeFormValidationChain = function () {
 			.exists({ values: "falsy" })
 			.withMessage("Name is required")
 			.trim()
-			.isLength({ min: 1, max: 40 })
+			.isLength({ min: 1 })
+			.withMessage("Name must have at least one character")
+			.isLength({ max: 40 })
 			.withMessage("Name must not exceed 40 characters")
 			// Formatting removes the slash, the prettier-ignore above prevents that
 			.isAlphanumeric("en-GB", { ignore: "\s" })
