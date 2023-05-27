@@ -2,13 +2,11 @@ const HardwareType = require("../models/HardwareType");
 const Hardware = require("../models/Hardware");
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
-const path = require("node:path");
 const multer = require("multer");
 const { unlink: deleteFile } = require("node:fs/promises");
 const mongoose = require("mongoose");
-const { isImage } = require("../utilities/helpers.mjs");
+const { isImage, PUBLIC_DIR } = require("../utilities/helpers.mjs");
 
-const PUBLIC_DIR = path.normalize(`${__dirname}/../public`);
 const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
 
 /* HANDLING POST REQUESTS FROM FORMS
