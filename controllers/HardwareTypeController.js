@@ -4,7 +4,7 @@ const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const path = require("node:path");
 const multer = require("multer");
-const { unlink } = require("node:fs/promises");
+const { unlink: deleteFile } = require("node:fs/promises");
 const mongoose = require("mongoose");
 const { isImage } = require("../utilities/helpers.mjs");
 
@@ -76,11 +76,11 @@ exports.create_hardware_type_post = [
 			const fileIsImage = await isImage(file);
 			if (fileIsImage === false) {
 				// Delete uploaded file if its not really an image.
-				await unlink(file.path);
+				await deleteFile(file.path);
 				throw new Error("Selected file is not an Image");
 			} else {
 				if (file.size / 1000 > 1024) {
-					await unlink(file.path);
+					await deleteFile(file.path);
 					throw new Error("Image must be less than 1MB");
 				}
 			}
@@ -112,7 +112,7 @@ exports.create_hardware_type_post = [
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await unlink(img_file.path);
+				await deleteFile(img_file.path);
 			}
 
 			res.render("hardware_type_form", {
@@ -182,11 +182,11 @@ exports.edit_hardware_type_post = [
 			const fileIsImage = await isImage(file);
 			if (fileIsImage === false) {
 				// Delete uploaded file if its not really an image.
-				await unlink(file.path);
+				await deleteFile(file.path);
 				throw new Error("Selected file is not an Image");
 			} else {
 				if (file.size / 1000 > 1024) {
-					await unlink(file.path);
+					await deleteFile(file.path);
 					throw new Error("Image must be less than 1MB");
 				}
 			}
@@ -228,7 +228,7 @@ exports.edit_hardware_type_post = [
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await unlink(img_file.path);
+				await deleteFile(img_file.path);
 			}
 
 			res.render("edit_hardware_type_form", {
@@ -249,7 +249,7 @@ exports.edit_hardware_type_post = [
 				imageSelected === true && oldHardwareType.img_filename !== undefined;
 			if (hasPreviousImage) {
 				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareType.image_url}`;
-				await unlink(oldImgFilePath);
+				await deleteFile(oldImgFilePath);
 			}
 			res.redirect(hardwareType.route_url);
 		}
@@ -303,7 +303,7 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 		// Transaction completes with no error, delete image for the now deleted hardware_type
 		// TODO: Delete images from hardwares
 		if (hasImage) {
-			await unlink(imgFilePath);
+			await deleteFile(imgFilePath);
 		}
 		res.redirect("/");
 	} catch (error) {
