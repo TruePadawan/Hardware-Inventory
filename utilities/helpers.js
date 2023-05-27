@@ -1,5 +1,6 @@
 const { normalize } = require("node:path");
-
+const { body } = require("express-validator");
+const { unlink: deleteFile } = require("node:fs/promises");
 // Path to the /public/ directory
 exports.PUBLIC_DIR = normalize(`${__dirname}/../public`);
 
@@ -12,11 +13,49 @@ exports.DELETE_HARDWARE_TYPE_PAGE = "delete_hardware_type_form";
 exports.ADD_HARDWARE_PAGE = "add_hardware_form";
 
 // Given a file, isImage checks if the file is an image file and returns a boolean
-exports.isImage = async function (file) {
+async function isImage(file) {
 	const { default: imageType, minimumBytes } = await import("image-type");
 	const { readChunk } = await import("read-chunk");
 
 	const buffer = await readChunk(file.path, { length: minimumBytes });
 	const fileIsImage = (await imageType(buffer)) !== false;
 	return fileIsImage;
+}
+exports.isImage = isImage;
+
+exports.createHardwareTypeFormValidationChain = function () {
+	return [
+		// Verify that uploaded file is really an image using a custom validator
+		body("img_file")
+			.optional()
+			.custom(async function (file) {
+				const fileIsImage = await isImage(file);
+				if (fileIsImage === false) {
+					// Delete uploaded file if its not really an image.
+					await deleteFile(file.path);
+					throw new Error("Selected file is not an Image");
+				} else {
+					if (file.size / 1000 > 1024) {
+						await deleteFile(file.path);
+						throw new Error("Image must be less than 1MB");
+					}
+				}
+			}),
+		// prettier-ignore
+		body("name")
+			.exists({ values: "falsy" })
+			.withMessage("Name is required")
+			.trim()
+			.isLength({ min: 1, max: 40 })
+			.withMessage("Name must not exceed 40 characters")
+			// Formatting removes the slash, the prettier-ignore above prevents that
+			.isAlphanumeric("en-GB", { ignore: "\s" })
+			.withMessage("Name must be alphanumeric")
+			.escape(),
+		body("desc", "Description is required")
+			.exists({ values: "falsy" })
+			.trim()
+			.isLength({ min: 1 })
+			.escape(),
+	];
 };

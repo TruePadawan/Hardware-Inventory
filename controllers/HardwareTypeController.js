@@ -6,13 +6,13 @@ const multer = require("multer");
 const { unlink: deleteFile } = require("node:fs/promises");
 const mongoose = require("mongoose");
 const {
-	isImage,
 	PUBLIC_DIR,
 	HARDWARE_TYPE_DETAILS_PAGE,
 	CREATE_HARDWARE_TYPE_PAGE,
 	INDEX_PAGE,
 	EDIT_HARDWARE_TYPE_PAGE,
 	DELETE_HARDWARE_TYPE_PAGE,
+	createHardwareTypeFormValidationChain,
 } = require("../utilities/helpers.js");
 
 const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
@@ -75,38 +75,8 @@ exports.create_hardware_type_post = [
 		}
 		next();
 	},
-	// Verify that uploaded file is really an image using a custom validator
-	body("img_file")
-		.optional()
-		.custom(async function (file) {
-			const fileIsImage = await isImage(file);
-			if (fileIsImage === false) {
-				// Delete uploaded file if its not really an image.
-				await deleteFile(file.path);
-				throw new Error("Selected file is not an Image");
-			} else {
-				if (file.size / 1000 > 1024) {
-					await deleteFile(file.path);
-					throw new Error("Image must be less than 1MB");
-				}
-			}
-		}),
-	// prettier-ignore
-	body("name")
-		.exists({ values: "falsy" })
-		.withMessage("Name is required")
-		.trim()
-		.isLength({ min: 1, max: 40 })
-		.withMessage("Name must not exceed 40 characters")
-		// Formatting removes the slash, the prettier-ignore above prevents that
-		.isAlphanumeric("en-GB", { ignore: "\s" })
-		.withMessage("Name must be alphanumeric")
-		.escape(),
-	body("desc", "Description is required")
-		.exists({ values: "falsy" })
-		.trim()
-		.isLength({ min: 1 })
-		.escape(),
+	// Validate form fields
+	...createHardwareTypeFormValidationChain(),
 	asyncHandler(async function (req, res) {
 		const errors = validationResult(req);
 		const { name, desc, img_file } = req.body;
@@ -180,43 +150,11 @@ exports.edit_hardware_type_post = [
 		}
 		next();
 	},
-
-	// Verify that uploaded file is really an image using a custom validator
-	body("img_file")
-		.optional()
-		.custom(async function (file) {
-			const fileIsImage = await isImage(file);
-			if (fileIsImage === false) {
-				// Delete uploaded file if its not really an image.
-				await deleteFile(file.path);
-				throw new Error("Selected file is not an Image");
-			} else {
-				if (file.size / 1000 > 1024) {
-					await deleteFile(file.path);
-					throw new Error("Image must be less than 1MB");
-				}
-			}
-		}),
-	// prettier-ignore
-	body("name")
-		.exists({ values: "falsy" })
-		.withMessage("Name is required")
-		.trim()
-		.isLength({ min: 1, max: 40 })
-		.withMessage("Name must not exceed 40 characters")
-		// Formatting removes the slash, the prettier-ignore above prevents that
-		.isAlphanumeric("en-GB", { ignore: "\s" })
-		.withMessage("Name must be alphanumeric")
-		.escape(),
-	body("desc", "Description is required")
-		.exists({ values: "falsy" })
-		.trim()
-		.isLength({ min: 1 })
-		.escape(),
+	// Validate form fields
+	...createHardwareTypeFormValidationChain(),
 	body("password", "Password is wrong!")
 		.escape()
 		.equals(process.env.ADMIN_PASSWORD),
-
 	asyncHandler(async function (req, res) {
 		const errors = validationResult(req);
 		const { name, desc, img_file } = req.body;
