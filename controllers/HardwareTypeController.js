@@ -5,7 +5,15 @@ const asyncHandler = require("express-async-handler");
 const multer = require("multer");
 const { unlink: deleteFile } = require("node:fs/promises");
 const mongoose = require("mongoose");
-const { isImage, PUBLIC_DIR } = require("../utilities/helpers.mjs");
+const {
+	isImage,
+	PUBLIC_DIR,
+	HARDWARE_TYPE_DETAILS_PAGE,
+	CREATE_HARDWARE_TYPE_PAGE,
+	INDEX_PAGE,
+	EDIT_HARDWARE_TYPE_PAGE,
+	DELETE_HARDWARE_TYPE_PAGE,
+} = require("../utilities/helpers.mjs");
 
 const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
 
@@ -26,7 +34,7 @@ exports.get_hardware_types = asyncHandler(async function (req, res) {
 		"name img_filename"
 	).exec();
 
-	res.render("index", {
+	res.render(INDEX_PAGE, {
 		title:
 			allHardwareTypes.length > 0 ? "Hardware Types" : "Create Hardware Type",
 		hardware_types: allHardwareTypes,
@@ -35,7 +43,7 @@ exports.get_hardware_types = asyncHandler(async function (req, res) {
 
 // Display form for creating hardware type
 exports.create_hardware_type_get = function (req, res) {
-	res.render("create_hardware_type_form", {
+	res.render(CREATE_HARDWARE_TYPE_PAGE, {
 		title: "Create Hardware Type",
 	});
 };
@@ -113,7 +121,7 @@ exports.create_hardware_type_post = [
 				await deleteFile(img_file.path);
 			}
 
-			res.render("create_hardware_type_form", {
+			res.render(CREATE_HARDWARE_TYPE_PAGE, {
 				title: "Create Hardware Type",
 				hardware_type: hardwareType,
 				show_home_button: true,
@@ -135,7 +143,7 @@ exports.get_hardware_details = asyncHandler(async function (req, res, next) {
 	if (hardwareType === null) {
 		throw new Error("Hardware Type not found!");
 	}
-	res.render("hardware_type_details", {
+	res.render(HARDWARE_TYPE_DETAILS_PAGE, {
 		title: hardwareType.name,
 		show_home_button: true,
 		hardware_type: hardwareType,
@@ -153,7 +161,7 @@ exports.edit_hardware_type_get = asyncHandler(async function (req, res) {
 	if (hardwareType === null) {
 		throw new Error("Hardware Type not found!");
 	}
-	res.render("edit_hardware_type_form", {
+	res.render(EDIT_HARDWARE_TYPE_PAGE, {
 		title: "Edit Hardware Type",
 		hardware_type: hardwareType,
 	});
@@ -229,7 +237,7 @@ exports.edit_hardware_type_post = [
 				await deleteFile(img_file.path);
 			}
 
-			res.render("edit_hardware_type_form", {
+			res.render(EDIT_HARDWARE_TYPE_PAGE, {
 				title: "Edit Hardware Type",
 				hardware_type: hardwareType,
 				errors: errors.array(),
@@ -262,7 +270,7 @@ exports.delete_hardware_type_get = asyncHandler(async function (req, res) {
 	if (hardwareType === null) {
 		throw new Error("Can't find any Hardware Type with the specified ID");
 	}
-	res.render("delete_hardware_type_form", {
+	res.render(DELETE_HARDWARE_TYPE_PAGE, {
 		title: "Delete Hardware Type",
 		hardware_type: hardwareType,
 	});
