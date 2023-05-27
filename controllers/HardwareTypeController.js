@@ -6,6 +6,7 @@ const path = require("node:path");
 const multer = require("multer");
 const { unlink } = require("node:fs/promises");
 const mongoose = require("mongoose");
+const { isImage } = require("../utilities/helpers.mjs");
 
 const PUBLIC_DIR = path.normalize(`${__dirname}/../public`);
 const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
@@ -72,11 +73,8 @@ exports.create_hardware_type_post = [
 	body("img_file")
 		.optional()
 		.custom(async function (file) {
-			const { default: imageType, minimumBytes } = await import("image-type");
-			const { readChunk } = await import("read-chunk");
-			const buffer = await readChunk(file.path, { length: minimumBytes });
-			const isImage = (await imageType(buffer)) !== false;
-			if (isImage === false) {
+			const fileIsImage = await isImage(file);
+			if (fileIsImage === false) {
 				// Delete uploaded file if its not really an image.
 				await unlink(file.path);
 				throw new Error("Selected file is not an Image");
@@ -181,11 +179,8 @@ exports.edit_hardware_type_post = [
 	body("img_file")
 		.optional()
 		.custom(async function (file) {
-			const { default: imageType, minimumBytes } = await import("image-type");
-			const { readChunk } = await import("read-chunk");
-			const buffer = await readChunk(file.path, { length: minimumBytes });
-			const isImage = (await imageType(buffer)) !== false;
-			if (isImage === false) {
+			const fileIsImage = await isImage(file);
+			if (fileIsImage === false) {
 				// Delete uploaded file if its not really an image.
 				await unlink(file.path);
 				throw new Error("Selected file is not an Image");
