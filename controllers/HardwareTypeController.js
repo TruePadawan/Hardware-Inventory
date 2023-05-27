@@ -113,7 +113,7 @@ exports.create_hardware_type_post = [
 				await deleteFile(img_file.path);
 			}
 
-			res.render("hardware_type_form", {
+			res.render("create_hardware_type_form", {
 				title: "Create Hardware Type",
 				hardware_type: hardwareType,
 				show_home_button: true,
