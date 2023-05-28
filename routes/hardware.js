@@ -25,9 +25,7 @@ router.post("/:hardwareID/delete", function (req, res) {
 });
 
 // GET request to edit hardware
-router.get("/:hardwareID/edit", function (req, res) {
-	res.send("ROUTE NOT SET: GET /hardware/:hardwareID/edit");
-});
+router.get("/:hardwareID/edit", HardwareController.edit_hardware_get);
 
 // POST request to edit hardware
 router.post("/:hardwareID/edit", function (req, res) {

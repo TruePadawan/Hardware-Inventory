@@ -5,6 +5,7 @@ const {
 	PUBLIC_DIR,
 	createHardwareFormValidationChain,
 	HARDWARE_DETAILS_PAGE,
+	EDIT_HARDWARE_PAGE,
 } = require("../utilities/helpers.js");
 const multer = require("multer");
 const { validationResult } = require("express-validator");
@@ -76,5 +77,25 @@ exports.get_hardware_details = asyncHandler(async function (req, res) {
 		title: hardware.name,
 		show_home_button: true,
 		hardware,
+	});
+});
+
+exports.edit_hardware_get = asyncHandler(async function (req, res) {
+	const [allHardwareTypes, hardware] = await Promise.all([
+		HardwareType.find().exec(),
+		Hardware.findById(req.params.hardwareID).exec(),
+	]);
+
+	if (allHardwareTypes.length === 0) {
+		throw new Error("No hardware type");
+	}
+	if (hardware === null) {
+		throw new Error("Hardware data not found");
+	}
+
+	res.render(EDIT_HARDWARE_PAGE, {
+		title: "Edit Hardware",
+		hardware,
+		hardware_types: allHardwareTypes,
 	});
 });

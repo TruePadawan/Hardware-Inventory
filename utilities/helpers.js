@@ -13,6 +13,7 @@ exports.EDIT_HARDWARE_TYPE_PAGE = "edit_hardware_type_form";
 exports.DELETE_HARDWARE_TYPE_PAGE = "delete_hardware_type_form";
 exports.ADD_HARDWARE_PAGE = "add_hardware_form";
 exports.HARDWARE_DETAILS_PAGE = "hardware_details";
+exports.EDIT_HARDWARE_PAGE = "edit_hardware_form";
 
 // Given a file, isImage checks if the file is an image file and returns a boolean
 async function isImage(file) {
