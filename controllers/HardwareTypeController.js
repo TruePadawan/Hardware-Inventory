@@ -187,7 +187,8 @@ exports.edit_hardware_type_post = [
 			await HardwareType.findByIdAndUpdate(hardwareTypeID, hardwareType).exec();
 
 			const hasPreviousImage =
-				imageSelected === true && oldHardwareTypeData.img_filename !== undefined;
+				imageSelected === true &&
+				oldHardwareTypeData.img_filename !== undefined;
 			if (hasPreviousImage) {
 				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareTypeData.image_url}`;
 				await deleteFile(oldImgFilePath);
@@ -199,8 +200,7 @@ exports.edit_hardware_type_post = [
 
 exports.delete_hardware_type_get = asyncHandler(async function (req, res) {
 	const hardwareType = await HardwareType.findById(
-		req.params.hardwareTypeID,
-		""
+		req.params.hardwareTypeID
 	).exec();
 	if (hardwareType === null) {
 		throw new Error("Can't find any Hardware Type with the specified ID");
