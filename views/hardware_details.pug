@@ -5,7 +5,8 @@ block css
 block content
     main.flex-grow-1.mt-2
         .d-flex.gap-3
-            img.hardware-image(src=hardware.image_url alt='hardware image')
+            if hardware.img_filename !== undefined
+                img.hardware-image(src=hardware.image_url alt='hardware image')
             .flex-grow-1.d-flex.flex-column
                 h3.m-0!=hardware.name
                 a.hardware-type.fs-5.align-self-start(href=hardware.hardware_type.route_url)!=hardware.hardware_type.name
