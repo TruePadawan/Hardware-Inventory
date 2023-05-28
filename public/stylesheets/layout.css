@@ -73,3 +73,7 @@ footer {
 button.my-button {
     border: none;
 }
+
+.price {
+    color: rgb(255, 163, 54);
+}
