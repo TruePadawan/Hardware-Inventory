@@ -13,16 +13,13 @@ body {
     border-radius: 4px;
 }
 
-.hardware-name:hover {
-    color: grey;
-}
-
-.hardware-item .hardware-image {
+.hardware-image {
     width: min(380px, 100%);
 }
 
-.hardware-item .hardware-type {
+.hardware-type {
     color: rgb(220, 220, 220);
+    text-decoration: underline dotted rgb(220, 220, 220) 2px;
 }
 
 @media screen and (max-width: 640px) {

@@ -10,7 +10,7 @@ block content
 				.d-flex.gap-1.w-50
 					a.my-button.purple.w-auto.flex-grow-1(href=`${hardware_type._id}/edit`) Edit
 					a.my-button.red.w-auto.flex-grow-1(href=`${hardware_type._id}/delete`) Delete
-			p.fs-5.my-2.desc=hardware_type.desc
+			p.fs-5.my-2.hardware-type-desc=hardware_type.desc
 		.flex-grow-1.d-flex.flex-column
 			.d-flex.justify-content-between.align-items-center.flex-wrap
 				p.fs-2.my-0 Hardware
@@ -21,13 +21,13 @@ block content
 						img(src='/icons/nothing_found.png' alt='nothing found' id='no-hardware-icon')
 						p.my-0.fs-4 No hardware
 			else
-				ul.mt-4.d-flex.flex-column.gap-3.p-0.hardware-item-list
+				ul.mt-4.flex-grow-1.d-flex.flex-column.gap-3.p-0.hardware-item-list
 					for hardware in hardwares
-						li.d-flex.gap-2
-							img.hardware-type-image(src=hardware.image_url alt='hardware image')
+						li.d-flex.gap-3.p-1.hardware-item
+							img.hardware-item-image(src=hardware.image_url alt='hardware image')
 							.flex-grow-1.d-flex.flex-column
 								h3.m-0
-									a.hardware-name(href=hardware.route_url)!=hardware.name
+									a.hardware-item-name(href=hardware.route_url)!=hardware.name
 								span.fs-5.price!=`${hardware.price_usd} USD`
-								span.fs-6!=`${hardware.number_in_stock} available`
-								p.fs-5.hardware-desc!=hardware.desc
+								span.fs-5!=`${hardware.number_in_stock} available`
+								p.fs-5.hardware-item-desc!=hardware.desc
