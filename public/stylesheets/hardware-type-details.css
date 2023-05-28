@@ -8,9 +8,19 @@ main {
     padding: 0 1rem;
 }
 
-.hardware-type-details .desc {
+.hardware-desc,
+.hardware-type-desc {
     font-family: "Nova Slim", cursive;
     color: rgb(220, 220, 220);
+}
+
+.hardware-image {
+    width: min(280px, 100%);
+    border-radius: 4px;
+}
+
+.hardware-name:hover {
+    color: grey;
 }
 
 #no-hardware-icon {

@@ -21,3 +21,12 @@ block content
 						img(src='/icons/nothing_found.png' alt='nothing found' id='no-hardware-icon')
 						p.my-0.fs-4 No hardware
 			else
+				ul.mt-4.d-flex.flex-column.gap-3.p-0.hardware-item-list
+					for hardware in hardwares
+						li.d-flex.gap-2.hardware-item
+							img.hardware-image(src=hardware.image_url alt='hardware image')
+							.flex-grow-1.gap-1
+								h3.m-0
+									a.hardware-name(href=hardware.route_url)!=hardware.name
+								span.fs-5!=`${hardware.price_usd} USD`
+								p.fs-5.hardware-desc!=hardware.desc
