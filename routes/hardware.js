@@ -15,14 +15,10 @@ router.post("/new", HardwareController.create_hardware_post);
 router.get("/:hardwareID", HardwareController.get_hardware_details);
 
 // GET request to delete hardware
-router.get("/:hardwareID/delete", function (req, res) {
-	res.send("ROUTE NOT SET: GET /hardware/:hardwareID/delete");
-});
+router.get("/:hardwareID/delete", HardwareController.delete_hardware_get);
 
 // POST request to delete hardware
-router.post("/:hardwareID/delete", function (req, res) {
-	res.send("ROUTE NOT SET: POST /hardware/:hardwareID/delete");
-});
+router.post("/:hardwareID/delete", HardwareController.delete_hardware_post);
 
 // GET request to edit hardware
 router.get("/:hardwareID/edit", HardwareController.edit_hardware_get);

@@ -6,6 +6,7 @@ const {
 	createHardwareFormValidationChain,
 	HARDWARE_DETAILS_PAGE,
 	EDIT_HARDWARE_PAGE,
+	DELETE_HARDWARE_PAGE,
 } = require("../utilities/helpers.js");
 const multer = require("multer");
 const { body, validationResult } = require("express-validator");
@@ -159,3 +160,31 @@ exports.edit_hardware_post = [
 		}
 	}),
 ];
+
+exports.delete_hardware_get = asyncHandler(async function (req, res) {
+	const hardware = await Hardware.findById(req.params.hardwareID).exec();
+	if (hardware === null) {
+		throw new Error("Hardware with specified ID not found");
+	}
+	res.render(DELETE_HARDWARE_PAGE, { title: "Delete Hardware Type", hardware });
+});
+
+exports.delete_hardware_post = asyncHandler(async function (req, res) {
+	const { hardwareID } = req.params;
+	const hardware = await Hardware.findById(hardwareID, "img_filename")
+		.populate("hardware_type")
+		.exec();
+	if (hardware === null) {
+		throw new Error("Hardware not found");
+	} else {
+		const hasImage = hardware.img_filename !== undefined;
+		const imgFilePath = `${PUBLIC_DIR}${hardware.image_url}`;
+		await Hardware.findByIdAndRemove(hardwareID).exec();
+
+		// delete image if any
+		if (hasImage) {
+			await deleteFile(imgFilePath);
+		}
+		res.redirect(hardware.hardware_type.route_url);
+	}
+});
