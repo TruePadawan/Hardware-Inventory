@@ -4,6 +4,7 @@ const {
 	ADD_HARDWARE_PAGE,
 	PUBLIC_DIR,
 	createHardwareFormValidationChain,
+	HARDWARE_DETAILS_PAGE,
 } = require("../utilities/helpers.js");
 const multer = require("multer");
 const { validationResult } = require("express-validator");
@@ -63,3 +64,17 @@ exports.create_hardware_post = [
 		}
 	}),
 ];
+
+exports.get_hardware_details = asyncHandler(async function (req, res) {
+	const hardware = await Hardware.findById(req.params.hardwareID)
+		.populate("hardware_type")
+		.exec();
+	if (hardware === null) {
+		throw new Error("Hardware not found");
+	}
+	res.render(HARDWARE_DETAILS_PAGE, {
+		title: hardware.name,
+		show_home_button: true,
+		hardware,
+	});
+});
