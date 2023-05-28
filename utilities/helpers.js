@@ -44,7 +44,6 @@ exports.createHardwareTypeFormValidationChain = function () {
 					}
 				}
 			}),
-		// prettier-ignore
 		body("name")
 			.exists({ values: "falsy" })
 			.withMessage("Name is required")
@@ -53,14 +52,15 @@ exports.createHardwareTypeFormValidationChain = function () {
 			.withMessage("Name must have at least one character")
 			.isLength({ max: 40 })
 			.withMessage("Name must not exceed 40 characters")
-			// Formatting removes the slash, the prettier-ignore above prevents that
-			.isAlphanumeric("en-GB", { ignore: "\s" })
-			.withMessage("Name must be alphanumeric")
+			.isString()
+			.withMessage("Name must be a String")
 			.escape(),
 		body("desc", "Description is required")
 			.exists({ values: "falsy" })
 			.trim()
 			.isLength({ min: 1 })
+			.isString()
+			.withMessage("Description must be a String")
 			.escape(),
 	];
 };
@@ -83,7 +83,6 @@ exports.createHardwareFormValidationChain = function () {
 					}
 				}
 			}),
-		// prettier-ignore
 		body("name")
 			.exists({ values: "falsy" })
 			.withMessage("Name is required")
@@ -92,6 +91,8 @@ exports.createHardwareFormValidationChain = function () {
 			.withMessage("Name must have at least one character")
 			.isLength({ max: 100 })
 			.withMessage("Name must not exceed 100 characters")
+			.isString()
+			.withMessage("Name must be a String")
 			.escape(),
 		// Use custom validator to check if id gotten from form matches any Hardware Type document's id
 		body("hardware_type", "Hardware Type is not specified")
@@ -114,6 +115,8 @@ exports.createHardwareFormValidationChain = function () {
 			.exists({ values: "falsy" })
 			.trim()
 			.isLength({ min: 1 })
+			.isString()
+			.withMessage("Description must be a String")
 			.escape(),
 	];
 };
