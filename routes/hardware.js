@@ -9,9 +9,7 @@ router.get("/", function (req, res) {
 router.get("/new", HardwareController.create_hardware_get);
 
 // POST request to add hardware under a hardware type
-router.post("/new", function (req, res) {
-	res.send("ROUTE NOT SET: POST /hardware/new");
-});
+router.post("/new", HardwareController.create_hardware_post);
 
 // GET request to show hardware details
 router.get("/:hardwareID", function (req, res) {
