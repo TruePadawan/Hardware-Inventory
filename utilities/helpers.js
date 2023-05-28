@@ -90,11 +90,8 @@ exports.createHardwareFormValidationChain = function () {
 			.trim()
 			.isLength({ min: 1 })
 			.withMessage("Name must have at least one character")
-			.isLength({ max: 40 })
-			.withMessage("Name must not exceed 40 characters")
-			// Formatting removes the slash, the prettier-ignore above prevents that
-			.isAlphanumeric("en-GB", { ignore: "\s" })
-			.withMessage("Name must be alphanumeric")
+			.isLength({ max: 100 })
+			.withMessage("Name must not exceed 100 characters")
 			.escape(),
 		// Use custom validator to check if id gotten from form matches any Hardware Type document's id
 		body("hardware_type", "Hardware Type is not specified")
