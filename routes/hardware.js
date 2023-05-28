@@ -28,8 +28,6 @@ router.post("/:hardwareID/delete", function (req, res) {
 router.get("/:hardwareID/edit", HardwareController.edit_hardware_get);
 
 // POST request to edit hardware
-router.post("/:hardwareID/edit", function (req, res) {
-	res.send("ROUTE NOT SET: POST /hardware/:hardwareID/edit");
-});
+router.post("/:hardwareID/edit", HardwareController.edit_hardware_post);
 
 module.exports = router;

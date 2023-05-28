@@ -8,7 +8,7 @@ const {
 	EDIT_HARDWARE_PAGE,
 } = require("../utilities/helpers.js");
 const multer = require("multer");
-const { validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const Hardware = require("../models/Hardware");
 const { unlink: deleteFile } = require("node:fs/promises");
 
@@ -42,7 +42,7 @@ exports.create_hardware_post = [
 		const hardware = new Hardware({
 			name,
 			hardware_type,
-			price,
+			price_usd: price,
 			number_in_stock,
 			desc,
 			img_filename: img_file !== undefined ? img_file.filename : undefined,
@@ -99,3 +99,63 @@ exports.edit_hardware_get = asyncHandler(async function (req, res) {
 		hardware_types: allHardwareTypes,
 	});
 });
+
+exports.edit_hardware_post = [
+	upload.single("img_file"),
+	// Put the file in req.body so that express-validator can access it.
+	function (req, res, next) {
+		if (req.file !== undefined) {
+			req.body.img_file = req.file;
+		}
+		next();
+	},
+	...createHardwareFormValidationChain(),
+	body("password", "Password is wrong!").equals(process.env.ADMIN_PASSWORD),
+	asyncHandler(async function (req, res) {
+		const { name, hardware_type, price, number_in_stock, desc, img_file } =
+			req.body;
+		const imageSelected = img_file !== undefined;
+		const { hardwareID } = req.params;
+		const hardware = new Hardware({
+			_id: hardwareID,
+			name,
+			hardware_type,
+			price_usd: price,
+			number_in_stock,
+			desc,
+			img_filename: imageSelected ? img_file.filename : undefined,
+		});
+
+		const errors = validationResult(req);
+		if (errors.isEmpty() === false) {
+			// Delete any uploaded image if any error occurs with form validation
+			if (img_file) {
+				await deleteFile(img_file.path);
+			}
+
+			// else re-render form with user input
+			const allHardwareTypes = await HardwareType.find().exec();
+			res.render(EDIT_HARDWARE_PAGE, {
+				title: "Add Hardware",
+				errors: errors.array(),
+				hardware,
+				hardware_types: allHardwareTypes,
+			});
+		} else {
+			// If no error and new image selected, delete former
+			// Update hardware document after storing its former data in a variable
+			const oldHardwareData = await Hardware.findById(
+				req.params.hardwareID,
+				"img_filename"
+			).exec();
+			await Hardware.findByIdAndUpdate(hardwareID, hardware).exec();
+			const hasPreviousImage =
+				imageSelected === true && oldHardwareData.img_filename !== undefined;
+			if (hasPreviousImage) {
+				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareData.image_url}`;
+				await deleteFile(oldImgFilePath);
+			}
+			res.redirect(hardware.route_url);
+		}
+	}),
+];
