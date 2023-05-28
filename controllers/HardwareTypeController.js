@@ -152,16 +152,13 @@ exports.edit_hardware_type_post = [
 	},
 	// Validate form fields
 	...createHardwareTypeFormValidationChain(),
-	body("password", "Password is wrong!")
-		.escape()
-		.equals(process.env.ADMIN_PASSWORD),
+	body("password", "Password is wrong!").equals(process.env.ADMIN_PASSWORD),
 	asyncHandler(async function (req, res) {
 		const errors = validationResult(req);
 		const { name, desc, img_file } = req.body;
 
 		const { hardwareTypeID } = req.params;
 		const imageSelected = img_file !== undefined;
-		req.body.imageSelected = imageSelected;
 
 		const hardwareType = new HardwareType({
 			name,
@@ -181,18 +178,18 @@ exports.edit_hardware_type_post = [
 				errors: errors.array(),
 			});
 		} else {
-			// If no error with form data and update query, and document has former image, Delete the now unused image file from disk
-			const oldHardwareType = await HardwareType.findById(
+			// If no error with form data and update query, and if document has former image, Delete the now unused image file from disk
+			// Update hardware type document after storing its former data in a variable
+			const oldHardwareTypeData = await HardwareType.findById(
 				hardwareTypeID,
 				"img_filename"
 			).exec();
-			// Update hardware type document after storing its former data in a variable
 			await HardwareType.findByIdAndUpdate(hardwareTypeID, hardwareType).exec();
 
 			const hasPreviousImage =
-				imageSelected === true && oldHardwareType.img_filename !== undefined;
+				imageSelected === true && oldHardwareTypeData.img_filename !== undefined;
 			if (hasPreviousImage) {
-				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareType.image_url}`;
+				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareTypeData.image_url}`;
 				await deleteFile(oldImgFilePath);
 			}
 			res.redirect(hardwareType.route_url);
