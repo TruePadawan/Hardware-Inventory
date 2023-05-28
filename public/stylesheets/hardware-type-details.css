@@ -23,6 +23,10 @@ main {
     color: grey;
 }
 
+.price {
+    color: rgba(255, 163, 54, 1);
+}
+
 #no-hardware-icon {
     width: 100px;
 }
