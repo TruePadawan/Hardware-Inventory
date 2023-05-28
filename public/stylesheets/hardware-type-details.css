@@ -13,7 +13,15 @@ main {
     color: rgb(220, 220, 220);
 }
 
+.hardware-item-desc {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
 .hardware-item {
+    max-height: 200px;
     background-color: rgba(250, 235, 215, 0.315);
     border-radius: 4px;
 }
@@ -23,7 +31,9 @@ main {
 }
 
 .hardware-item-image {
-    width: min(200px, 100%);
+    object-fit: cover;
+    width: 250px;
+    height: auto;
     border-radius: 4px;
 }
 
