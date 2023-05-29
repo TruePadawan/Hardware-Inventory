@@ -34,7 +34,7 @@ block content
 				input#password(type='password' name='password' required)
 			.d-flex.flex-column.gap-2.align-items-stretch
 				button.my-button.purple(type='submit') Edit
-				a.my-button.red(href='/') Cancel
+				a.my-button.red(href=hardware.route_url) Cancel
 		if errors
 			ul
 				for error in errors
