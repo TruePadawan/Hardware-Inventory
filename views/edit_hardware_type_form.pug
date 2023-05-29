@@ -10,10 +10,10 @@ block content
 				p.my-0.fs-6.text-danger.text-center Admin password is required for this action
 			.d-flex.flex-column
 				label(for='name') Name*
-				input#name(type='text' name='name' placeholder='Graphics Cards' maxlength='40' value=hardware_type.name autofocus required)
+				input#name(type='text' name='name' placeholder='Graphics Cards' maxlength='40' value!=hardware_type.name autofocus required)
 			.d-flex.flex-column
 				label(for='desc') Description*
-				textarea#desc(rows='6' name='desc' required)=hardware_type.desc
+				textarea#desc(rows='6' name='desc' required)!=hardware_type.desc
 			.d-flex.flex-column
 				label(for='img_file') Image
 					span.fs-6.text-info  (<= 1MB in size)

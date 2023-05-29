@@ -10,7 +10,7 @@ block content
 				p.my-0.fs-6.text-danger.text-center Admin password is required for this action
 			.d-flex.flex-column
 				label(for='name') Name*
-				input#name(type='text' name='name' placeholder='GTX 950' maxlength='100' value=hardware.name autofocus required)
+				input#name(type='text' name='name' placeholder='GTX 950' maxlength='100' value!=hardware.name autofocus required)
 			.d-flex.flex-column
 				label(for='hardware_type') Hardware Type*
 				select#hardware_type(name='hardware_type')
@@ -24,7 +24,7 @@ block content
 				input#name(type='number' name='number_in_stock' value=hardware.number_in_stock required)
 			.d-flex.flex-column
 				label(for='desc') Description*
-				textarea#desc(rows='6' name='desc' required)=hardware.desc
+				textarea#desc(rows='6' name='desc' required)!=hardware.desc
 			.d-flex.flex-column
 				label(for='img_file') Image
 					span.fs-6.text-info  (<= 1MB in size)
