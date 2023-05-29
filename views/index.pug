@@ -9,7 +9,7 @@ block css
 block content
 	if hardware_types.length > 0
 		main.flex-grow-1.hardware-type-list
-			a(href='/hardware_types/new' class='create-category text-white d-flex flex-column align-items-center gap-3')
+			a.create-category.text-white(href='/hardware_types/new')
 				img(src='/icons/pencil_100px.png' alt='pencil')
 				p.fs-4.text-center Create Hardware Type
 			for hardware_type in hardware_types
