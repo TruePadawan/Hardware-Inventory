@@ -6,6 +6,7 @@ body {
 
 .hardware-desc {
     color: rgb(220, 220, 220);
+    white-space: pre-wrap;
 }
 
 .hardware-image {

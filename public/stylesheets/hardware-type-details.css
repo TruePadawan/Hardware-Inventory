@@ -14,6 +14,7 @@ main {
 }
 
 .hardware-item-desc {
+    white-space: pre-wrap;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 4;
