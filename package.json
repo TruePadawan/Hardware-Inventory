@@ -7,6 +7,7 @@
     "serverstart": "SET DEBUG=hardware-inventory:* & nodemon -e js,css,pug ./bin/www"
   },
   "dependencies": {
+    "compression": "^1.7.4",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
