@@ -5,16 +5,16 @@ block css
 block content
 	main.flex-grow-1.d-flex.flex-column.hardware-type-details
 		.my-3
-			.d-flex.justify-content-between.align-items-center.gap-2.flex-wrap
-				h2.my-0=hardware_type.name
-				.d-flex.gap-1.w-50
+			.header
+				h2.flex-grow-1.my-0!=hardware_type.name
+				..buttons
 					a.my-button.purple.w-auto.flex-grow-1(href=`${hardware_type._id}/edit`) Edit
 					a.my-button.red.w-auto.flex-grow-1(href=`${hardware_type._id}/delete`) Delete
 			p.fs-5.my-2.hardware-type-desc!=hardware_type.desc
 		.flex-grow-1.d-flex.flex-column
-			.d-flex.justify-content-between.align-items-center.flex-wrap
-				p.fs-2.my-0 Hardware
-				a.my-button.brown(href='/hardware/new') Add Hardware
+			.header
+				p.fs-2.my-0.flex-grow-1 Hardware
+				a.my-button.brown.flex-grow-1.w-auto(href='/hardware/new') Add Hardware
 			if hardwares.length === 0
 				.flex-grow-1.d-flex.justify-content-center.align-items-center
 					.d-flex.flex-column.gap-1
@@ -23,7 +23,7 @@ block content
 			else
 				ul.mt-4.flex-grow-1.d-flex.flex-column.gap-3.p-0.hardware-item-list
 					for hardware in hardwares
-						li.d-flex.gap-3.p-1.hardware-item
+						li.hardware-item
 							if hardware.img_filename !== undefined
 								img.hardware-item-image(src=hardware.image_url alt='hardware image')
 							else if hardware_type.img_filename !== undefined

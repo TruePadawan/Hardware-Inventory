@@ -8,7 +8,22 @@ main {
     padding: 0 1rem;
 }
 
-.hardware-type-desc, .hardware-item-desc {
+.hardware-type-details .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+}
+
+.hardware-type-details ..buttons {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+}
+
+.hardware-type-desc,
+.hardware-item-desc {
     font-family: "Nova Slim", cursive;
     color: rgb(220, 220, 220);
 }
@@ -17,13 +32,15 @@ main {
     white-space: pre-wrap;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
 
 .hardware-item {
-    max-height: 200px;
-    background-color: rgba(250, 235, 215, 0.315);
+    display: flex;
+    gap: 1rem;
+    padding: .25rem;
+    background-color: rgb(45, 45, 45);
     border-radius: 4px;
 }
 
@@ -45,5 +62,28 @@ main {
 @media screen and (max-width: 640px) {
     main {
         padding: 0;
+    }
+}
+
+@media screen and (max-width: 810px) {
+    .hardware-type-details .header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    ..buttons .my-button {
+        min-width: 200px;
+    }
+
+    .hardware-item {
+        height: max-content;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hardware-item-desc {
+        -webkit-line-clamp: 3;
     }
 }
