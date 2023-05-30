@@ -15,7 +15,7 @@ main {
     gap: .5rem;
 }
 
-.hardware-type-details ..buttons {
+.hardware-type-details .buttons {
     flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
@@ -72,7 +72,7 @@ main {
         text-align: center;
     }
 
-    ..buttons .my-button {
+    .buttons .my-button {
         min-width: 200px;
     }
 

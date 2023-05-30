@@ -7,7 +7,7 @@ block content
 		.my-3
 			.header
 				h2.flex-grow-1.my-0!=hardware_type.name
-				..buttons
+				.buttons
 					a.my-button.purple.w-auto.flex-grow-1(href=`${hardware_type._id}/edit`) Edit
 					a.my-button.red.w-auto.flex-grow-1(href=`${hardware_type._id}/delete`) Delete
 			p.fs-5.my-2.hardware-type-desc!=hardware_type.desc
