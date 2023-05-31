@@ -19,7 +19,7 @@ const mongoose = require("mongoose");
 main().catch((err) => console.log(err));
 async function main() {
 	const connectionString = process.env.MONGODB_CONNECT_STR;
-	await mongoose.connect(connectionString);
+	await mongoose.connect(connectionString, { dbName: "hardware_inventory" });
 }
 
 // view engine setup
