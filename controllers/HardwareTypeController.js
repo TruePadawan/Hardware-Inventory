@@ -67,7 +67,6 @@ exports.create_hardware_type_post = [
 	function (req, res, next) {
 		if (req.file !== undefined) {
 			req.body.img_file = req.file;
-			console.log(req.file);
 		}
 		next();
 	},
