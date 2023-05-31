@@ -11,7 +11,7 @@ const HardwareSchema = new mongoose.Schema({
 		ref: "HardwareType",
 		type: mongoose.Schema.Types.ObjectId,
 	},
-	number_in_stock: { type: Number, required: true, default: 0 },
+	number_in_stock: { type: Number, required: true, default: 1, min: 1 },
 });
 
 HardwareSchema.virtual("route_url").get(function () {
