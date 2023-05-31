@@ -7,16 +7,17 @@ body {
 .hardware {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1rem;
 }
 
 .hardware-desc {
+    font-family: 'Noto Sans JP', sans-serif;
     color: rgb(220, 220, 220);
     white-space: pre-wrap;
 }
 
 .hardware-image {
+    align-self: center;
     object-fit: cover;
     max-width: 500px;
     height: auto;

@@ -13,9 +13,12 @@ block content
 				input#name(type='text' name='name' placeholder='GTX 950' maxlength='100' value!=hardware.name autofocus required)
 			.d-flex.flex-column
 				label(for='hardware_type') Hardware Type*
-				select#hardware_type(name='hardware_type')
+				select#hardware_type(name='hardware_type' required)
 					for hardware_type in hardware_types
-						option(value=hardware_type._id selected=hardware.hardware_type===hardware_type._id)=hardware_type.name
+						if hardware.hardware_type.equals(hardware_type._id)
+							option(value=hardware_type._id selected)=hardware_type.name
+						else
+							option(value=hardware_type._id)=hardware_type.name
 			.d-flex.flex-column
 				label(for='price') Price(USD)*
 				input#name(type='number' name='price' value=hardware.price_usd required)

@@ -3,36 +3,22 @@ const Hardware = require("../models/Hardware");
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const multer = require("multer");
-const { unlink: deleteFile } = require("node:fs/promises");
 const mongoose = require("mongoose");
 const {
-	PUBLIC_DIR,
 	HARDWARE_TYPE_DETAILS_PAGE,
 	CREATE_HARDWARE_TYPE_PAGE,
 	INDEX_PAGE,
 	EDIT_HARDWARE_TYPE_PAGE,
 	DELETE_HARDWARE_TYPE_PAGE,
 	createHardwareTypeFormValidationChain,
+	deleteImageInCloudinary,
 } = require("../utilities/helpers.js");
-
-const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware_types` });
-
-/* HANDLING POST REQUESTS FROM FORMS
-	For POST requests from forms, the user supplied data is sanitized and validated.
-	If any error with the data
-		re-render form with supplied data and show errors
-	else
-		continue
-	If image file is part of form data,
-	process image only after other form data is validated to be correct
-*/
+const cloudinary = require("../utilities/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 // Display all hardware categories
 exports.get_hardware_types = asyncHandler(async function (req, res) {
-	const allHardwareTypes = await HardwareType.find(
-		{},
-		"name img_filename"
-	).exec();
+	const allHardwareTypes = await HardwareType.find({}, "name img_url").exec();
 
 	res.render(INDEX_PAGE, {
 		title:
@@ -66,12 +52,21 @@ exports.create_hardware_type_get = function (req, res) {
 	else
 		delete uploaded file, validate other fields and re-render form with errors gotten
 */
+const cloudinaryStorage = new CloudinaryStorage({
+	cloudinary,
+	params: {
+		folder: "hardware_inventory/hardware_types",
+		upload_preset: "hardware_types",
+	},
+});
+const upload = multer({ storage: cloudinaryStorage });
 exports.create_hardware_type_post = [
 	upload.single("img_file"),
 	// Put the file in req.body so that express-validator can access it.
 	function (req, res, next) {
 		if (req.file !== undefined) {
 			req.body.img_file = req.file;
+			console.log(req.file);
 		}
 		next();
 	},
@@ -83,18 +78,18 @@ exports.create_hardware_type_post = [
 		const hardwareType = new HardwareType({
 			name,
 			desc,
-			img_filename: img_file !== undefined ? img_file.filename : undefined,
+			img_url: img_file !== undefined ? img_file.path : undefined,
+			img_public_id: img_file !== undefined ? img_file.filename : undefined,
 		});
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteFile(img_file.path);
+				await deleteImageInCloudinary(img_file.filename);
 			}
 
 			res.render(CREATE_HARDWARE_TYPE_PAGE, {
 				title: "Create Hardware Type",
 				hardware_type: hardwareType,
-				show_home_button: true,
 				errors: errors.array(),
 			});
 		} else {
@@ -156,20 +151,20 @@ exports.edit_hardware_type_post = [
 	asyncHandler(async function (req, res) {
 		const errors = validationResult(req);
 		const { name, desc, img_file } = req.body;
-
 		const { hardwareTypeID } = req.params;
 		const imageSelected = img_file !== undefined;
 
 		const hardwareType = new HardwareType({
+			_id: hardwareTypeID,
 			name,
 			desc,
-			img_filename: imageSelected ? img_file.filename : undefined,
-			_id: hardwareTypeID,
+			img_url: imageSelected ? img_file.path : undefined,
+			img_public_id: imageSelected ? img_file.filename : undefined,
 		});
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteFile(img_file.path);
+				await deleteImageInCloudinary(img_file.filename);
 			}
 
 			res.render(EDIT_HARDWARE_TYPE_PAGE, {
@@ -178,20 +173,21 @@ exports.edit_hardware_type_post = [
 				errors: errors.array(),
 			});
 		} else {
-			// If no error with form data and update query, and if document has former image, Delete the now unused image file from disk
+			// If no error with form data and update query, and if document has former image, Delete the now unused image
 			// Update hardware type document after storing its former data in a variable
 			const oldHardwareTypeData = await HardwareType.findById(
 				hardwareTypeID,
-				"img_filename"
+				"img_url img_public_id"
 			).exec();
 			await HardwareType.findByIdAndUpdate(hardwareTypeID, hardwareType).exec();
 
 			const hasPreviousImage =
 				imageSelected === true &&
-				oldHardwareTypeData.img_filename !== undefined;
+				oldHardwareTypeData.img_url !== undefined &&
+				oldHardwareTypeData.img_public_id !== undefined;
+
 			if (hasPreviousImage) {
-				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareTypeData.image_url}`;
-				await deleteFile(oldImgFilePath);
+				await deleteImageInCloudinary(oldHardwareTypeData.img_public_id);
 			}
 			res.redirect(hardwareType.route_url);
 		}
@@ -218,7 +214,7 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 
 	try {
 		let hasImage = false;
-		let imgFilePath = "";
+		let imgPublicID = "";
 
 		await session.withTransaction(async () => {
 			await Hardware.deleteMany(
@@ -229,22 +225,23 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 			// Store hardware_type image data for deletion after transaction is successful
 			const hardwareType = await HardwareType.findById(
 				hardwareTypeID,
-				"img_filename"
+				"img_public_id img_url"
 			).exec();
 			if (hardwareType === null) {
 				throw new Error("Hardware Type not found");
 			}
-			hasImage = hardwareType.img_filename !== undefined;
-			imgFilePath = `${PUBLIC_DIR}${hardwareType.image_url}`;
+			hasImage =
+				hardwareType.img_url !== undefined &&
+				hardwareType.img_public_id !== undefined;
+			imgPublicID = hardwareType.img_public_id;
 			await HardwareType.findByIdAndRemove(hardwareTypeID, { session }).exec();
 		});
 
 		await session.commitTransaction();
 		await session.endSession();
 		// Transaction completes with no error, delete image for the now deleted hardware_type
-		// TODO: Delete images from hardwares
 		if (hasImage) {
-			await deleteFile(imgFilePath);
+			await deleteImageInCloudinary(imgPublicID);
 		}
 		res.redirect("/");
 	} catch (error) {

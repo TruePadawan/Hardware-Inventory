@@ -24,10 +24,10 @@ block content
 				ul.mt-4.flex-grow-1.d-flex.flex-column.gap-3.p-0.hardware-item-list
 					for hardware in hardwares
 						li.hardware-item
-							if hardware.img_filename !== undefined
-								img.hardware-item-image(src=hardware.image_url alt='hardware image')
-							else if hardware_type.img_filename !== undefined
-								img.hardware-item-image(src=hardware_type.image_url alt='hardware image')
+							if hardware.img_url !== undefined
+								img.hardware-item-image(src=hardware.img_url alt='hardware image')
+							else if hardware_type.img_url !== undefined
+								img.hardware-item-image(src=hardware_type.img_url alt='hardware image')
 							.flex-grow-1.d-flex.flex-column
 								h3.m-0
 									a.hardware-item-name(href=hardware.route_url)!=hardware.name

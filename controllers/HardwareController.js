@@ -7,13 +7,13 @@ const {
 	HARDWARE_DETAILS_PAGE,
 	EDIT_HARDWARE_PAGE,
 	DELETE_HARDWARE_PAGE,
+	deleteImageInCloudinary,
 } = require("../utilities/helpers.js");
 const multer = require("multer");
 const { body, validationResult } = require("express-validator");
 const Hardware = require("../models/Hardware");
-const { unlink: deleteFile } = require("node:fs/promises");
-
-const upload = multer({ dest: `${PUBLIC_DIR}/images/hardware` });
+const cloudinary = require("../utilities/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 exports.create_hardware_get = asyncHandler(async function (req, res) {
 	const allHardwareTypes = await HardwareType.find().exec();
@@ -26,6 +26,14 @@ exports.create_hardware_get = asyncHandler(async function (req, res) {
 	});
 });
 
+const cloudinaryStorage = new CloudinaryStorage({
+	cloudinary,
+	params: {
+		folder: "hardware_inventory/hardwares",
+		upload_preset: "hardwares",
+	},
+});
+const upload = multer({ storage: cloudinaryStorage });
 exports.create_hardware_post = [
 	upload.single("img_file"),
 	// Put the file in req.body so that express-validator can access it.
@@ -46,23 +54,23 @@ exports.create_hardware_post = [
 			price_usd: price,
 			number_in_stock,
 			desc,
-			img_filename: img_file !== undefined ? img_file.filename : undefined,
+			img_url: img_file !== undefined ? img_file.path : undefined,
+			img_public_id: img_file !== undefined ? img_file.filename : undefined,
 		});
 
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteFile(img_file.path);
+				await deleteImageInCloudinary(img_file.filename);
 			}
 			res.render(ADD_HARDWARE_PAGE, {
 				title: "Add Hardware",
-				errors: errors.array(),
 				hardware,
+				errors: errors.array(),
 			});
 		} else {
 			await hardware.save();
-			const hardwareType = await HardwareType.findById(hardware_type).exec();
-			res.redirect(hardwareType.route_url);
+			res.redirect(hardware.route_url);
 		}
 	}),
 ];
@@ -124,37 +132,40 @@ exports.edit_hardware_post = [
 			price_usd: price,
 			number_in_stock,
 			desc,
-			img_filename: imageSelected ? img_file.filename : undefined,
+			img_url: imageSelected ? img_file.path : undefined,
+			img_public_id: imageSelected ? img_file.filename : undefined,
 		});
 
 		const errors = validationResult(req);
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteFile(img_file.path);
+				await deleteImageInCloudinary(img_file.filename);
 			}
 
 			// else re-render form with user input
 			const allHardwareTypes = await HardwareType.find().exec();
 			res.render(EDIT_HARDWARE_PAGE, {
-				title: "Add Hardware",
-				errors: errors.array(),
+				title: "Edit Hardware",
 				hardware,
 				hardware_types: allHardwareTypes,
+				errors: errors.array(),
 			});
 		} else {
 			// If no error and new image selected, delete former
 			// Update hardware document after storing its former data in a variable
 			const oldHardwareData = await Hardware.findById(
 				req.params.hardwareID,
-				"img_filename"
+				"img_url img_public_id"
 			).exec();
 			await Hardware.findByIdAndUpdate(hardwareID, hardware).exec();
 			const hasPreviousImage =
-				imageSelected === true && oldHardwareData.img_filename !== undefined;
+				imageSelected === true &&
+				oldHardwareData.img_url !== undefined &&
+				oldHardwareData.img_public_id !== undefined;
+
 			if (hasPreviousImage) {
-				const oldImgFilePath = `${PUBLIC_DIR}${oldHardwareData.image_url}`;
-				await deleteFile(oldImgFilePath);
+				await deleteImageInCloudinary(oldHardwareData.img_public_id);
 			}
 			res.redirect(hardware.route_url);
 		}
@@ -171,19 +182,19 @@ exports.delete_hardware_get = asyncHandler(async function (req, res) {
 
 exports.delete_hardware_post = asyncHandler(async function (req, res) {
 	const { hardwareID } = req.params;
-	const hardware = await Hardware.findById(hardwareID, "img_filename")
+	const hardware = await Hardware.findById(hardwareID, "img_public_id img_url")
 		.populate("hardware_type")
 		.exec();
 	if (hardware === null) {
 		throw new Error("Hardware not found");
 	} else {
-		const hasImage = hardware.img_filename !== undefined;
-		const imgFilePath = `${PUBLIC_DIR}${hardware.image_url}`;
+		const hasImage =
+			hardware.img_url !== undefined && hardware.img_public_id !== undefined;
 		await Hardware.findByIdAndRemove(hardwareID).exec();
 
 		// delete image if any
 		if (hasImage) {
-			await deleteFile(imgFilePath);
+			await deleteImageInCloudinary(hardware.img_public_id);
 		}
 		res.redirect(hardware.hardware_type.route_url);
 	}

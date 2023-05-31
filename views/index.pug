@@ -13,9 +13,9 @@ block content
 				img(src='/icons/pencil_100px.png' alt='pencil')
 				p.fs-4.text-center Create Hardware Type
 			for hardware_type in hardware_types
-				if hardware_type.img_filename
+				if hardware_type.img_url !== undefined
 					a.hardware-type-item.has-image.fs-4(href=hardware_type.route_url)
-						img(src=hardware_type.image_url alt='hardware type image')
+						img(src=hardware_type.img_url alt='hardware type image')
 						span.name=hardware_type.name
 				else
 					a.hardware-type-item.fs-4(href=hardware_type.route_url)=hardware_type.name

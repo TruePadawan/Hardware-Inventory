@@ -1,7 +1,7 @@
 const { normalize } = require("node:path");
 const { body } = require("express-validator");
-const { unlink: deleteFile } = require("node:fs/promises");
 const HardwareType = require("../models/HardwareType");
+const cloudinary = require("./cloudinary");
 // Path to the /public/ directory
 exports.PUBLIC_DIR = normalize(`${__dirname}/../public`);
 
@@ -16,35 +16,47 @@ exports.HARDWARE_DETAILS_PAGE = "hardware_details";
 exports.EDIT_HARDWARE_PAGE = "edit_hardware_form";
 exports.DELETE_HARDWARE_PAGE = "delete_hardware_form";
 
-// Given a file, isImage checks if the file is an image file and returns a boolean
-async function isImage(file) {
-	const { default: imageType, minimumBytes } = await import("image-type");
-	const { readChunk } = await import("read-chunk");
-
-	const buffer = await readChunk(file.path, { length: minimumBytes });
-	const fileIsImage = (await imageType(buffer)) !== false;
-	return fileIsImage;
+function deleteImageInCloudinary(image_public_id) {
+	return cloudinary.uploader.destroy(image_public_id, {
+		invalidate: true,
+	});
 }
-exports.isImage = isImage;
+
+exports.deleteImageInCloudinary = deleteImageInCloudinary;
+
+// Given a file, isValidImage checks if the file is an image file and returns a boolean
+async function isValidImage(image_data) {
+	const validationData = { isValid: true, errorMessage: "" };
+	const isImage = image_data.mimetype.split("/").at(0) === "image";
+	const isLessThan1MB = image_data.size / 1000 < 1024;
+
+	if (isImage === false) {
+		validationData.isValid = false;
+		validationData.errorMessage = "Selected file is not an Image";
+	} else if (isLessThan1MB === false) {
+		validationData.isValid = false;
+		validationData.errorMessage = "Image must be less than 1MB";
+	}
+	return validationData;
+}
+
+function createImageValidationChain(field) {
+	return body(field)
+		.optional()
+		.custom(async function (image_data) {
+			const validationData = await isValidImage(image_data);
+			if (validationData.isValid === false) {
+				// Delete uploaded file if its not really an image.
+				await deleteImageInCloudinary(image_data.filename);
+				throw new Error(validationData.errorMessage);
+			}
+		});
+}
 
 exports.createHardwareTypeFormValidationChain = function () {
 	return [
-		// Verify that uploaded file is really an image using a custom validator
-		body("img_file")
-			.optional()
-			.custom(async function (file) {
-				const fileIsImage = await isImage(file);
-				if (fileIsImage === false) {
-					// Delete uploaded file if its not really an image.
-					await deleteFile(file.path);
-					throw new Error("Selected file is not an Image");
-				} else {
-					if (file.size / 1000 > 1024) {
-						await deleteFile(file.path);
-						throw new Error("Image must be less than 1MB");
-					}
-				}
-			}),
+		// Verify that uploaded file is an image and is less than 1MB using a custom validator
+		createImageValidationChain("img_file"),
 		body("name")
 			.exists({ values: "falsy" })
 			.withMessage("Name is required")
@@ -68,22 +80,8 @@ exports.createHardwareTypeFormValidationChain = function () {
 
 exports.createHardwareFormValidationChain = function () {
 	return [
-		// Verify that uploaded file is really an image using a custom validator
-		body("img_file")
-			.optional()
-			.custom(async function (file) {
-				const fileIsImage = await isImage(file);
-				if (fileIsImage === false) {
-					// Delete uploaded file if its not really an image.
-					await deleteFile(file.path);
-					throw new Error("Selected file is not an Image");
-				} else {
-					if (file.size / 1000 > 1024) {
-						await deleteFile(file.path);
-						throw new Error("Image must be less than 1MB");
-					}
-				}
-			}),
+		// Verify that uploaded file is an image and is less than 1MB using a custom validator
+		createImageValidationChain("img_file"),
 		body("name")
 			.exists({ values: "falsy" })
 			.withMessage("Name is required")

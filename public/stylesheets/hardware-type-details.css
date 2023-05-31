@@ -24,7 +24,7 @@ main {
 
 .hardware-type-desc,
 .hardware-item-desc {
-    font-family: "Nova Slim", cursive;
+    font-family: 'Noto Sans JP', sans-serif;
     color: rgb(220, 220, 220);
 }
 

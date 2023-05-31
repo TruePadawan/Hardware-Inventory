@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const HardwareSchema = new mongoose.Schema({
 	name: { required: true, type: String, maxLength: 100 },
 	desc: { required: true, type: String },
-	img_filename: String,
+	img_url: String,
+	img_public_id: String,
 	price_usd: { type: Number, required: true, default: 0 },
 	hardware_type: {
 		required: true,
@@ -15,10 +16,6 @@ const HardwareSchema = new mongoose.Schema({
 
 HardwareSchema.virtual("route_url").get(function () {
 	return `/hardware/${this._id}`;
-});
-
-HardwareSchema.virtual("image_url").get(function () {
-	return `/images/hardware/${this.img_filename}`;
 });
 
 module.exports = mongoose.model("Hardware", HardwareSchema);
