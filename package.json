@@ -30,6 +30,7 @@
 		"read-chunk": "^4.0.3"
 	},
 	"devDependencies": {
-		"browser-refresh": "^1.7.3"
+		"browser-refresh": "^1.7.3",
+		"nodemon": "^2.0.22"
 	}
 }
