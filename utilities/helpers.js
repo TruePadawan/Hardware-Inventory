@@ -22,7 +22,14 @@ function deleteImageInCloudinary(image_public_id) {
 	});
 }
 
+async function deleteImagesFromCloudinary(image_public_ids) {
+	for (public_id of image_public_ids) {
+		await deleteImageInCloudinary(public_id);
+	}
+}
+
 exports.deleteImageInCloudinary = deleteImageInCloudinary;
+exports.deleteImagesFromCloudinary = deleteImagesFromCloudinary;
 
 // Given a file, isValidImage checks if the file is an image file and returns a boolean
 async function isValidImage(image_data) {

@@ -12,6 +12,7 @@ const {
 	DELETE_HARDWARE_TYPE_PAGE,
 	createHardwareTypeFormValidationChain,
 	deleteImageInCloudinary,
+	deleteImagesFromCloudinary,
 } = require("../utilities/helpers.js");
 const cloudinary = require("../utilities/cloudinary");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -212,10 +213,15 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 	const { hardwareTypeID } = req.params;
 	const session = await mongoose.startSession();
 
-	try {
-		let hasImage = false;
-		let imgPublicID = "";
+	let hasImage = false;
+	let imgPublicID = "";
+	// Array of the image id of hardware under to-be deleted hardware type, stored so it can be deleted if transaction is successful
+	const hardwareImages = await Hardware.find(
+		{ hardware_type: hardwareTypeID },
+		"img_public_id"
+	).exec();
 
+	try {
 		await session.withTransaction(async () => {
 			await Hardware.deleteMany(
 				{ hardware_type: hardwareTypeID },
@@ -240,8 +246,10 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 		await session.commitTransaction();
 		await session.endSession();
 		// Transaction completes with no error, delete image for the now deleted hardware_type
+		// Delete hardware images that are under the deleted hardware type
 		if (hasImage) {
 			await deleteImageInCloudinary(imgPublicID);
+			await deleteImagesFromCloudinary(hardwareImages);
 		}
 		res.redirect("/");
 	} catch (error) {
