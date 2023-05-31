@@ -111,12 +111,12 @@ exports.createHardwareFormValidationChain = function () {
 			}),
 		body("price", "Price is required")
 			.exists({ values: "falsy" })
-			.isNumeric()
-			.withMessage("Price must be a number"),
+			.isFloat({ min: 0 })
+			.withMessage("Price must be a number greater than 0"),
 		body("number_in_stock", "Amount is required")
 			.exists({ values: "falsy" })
-			.isNumeric()
-			.withMessage("Amount must be a number"),
+			.isFloat({ min: 0 })
+			.withMessage("Amount must be a number greater than 0"),
 		body("desc", "Description is required")
 			.exists({ values: "falsy" })
 			.trim()

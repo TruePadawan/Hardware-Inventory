@@ -17,10 +17,10 @@ block content
 						option(value=hardware_type._id)=hardware_type.name
 			.d-flex.flex-column
 				label(for='price') Price(USD)*
-				input#name(type='number' name='price' value=hardware===undefined?0:hardware.price_usd required)
+				input#name(type='number' name='price' min=0 value=hardware===undefined?0:hardware.price_usd required)
 			.d-flex.flex-column
 				label(for='number_in_stock') Amount*
-				input#name(type='number' name='number_in_stock' value=hardware===undefined?0:hardware.number_in_stock required)
+				input#name(type='number' name='number_in_stock' min=0 value=hardware===undefined?0:hardware.number_in_stock required)
 			.d-flex.flex-column
 				label(for='desc') Description*
 				textarea#desc(rows='6' name='desc' required)=hardware===undefined?"":hardware.desc

@@ -5,13 +5,13 @@ const HardwareSchema = new mongoose.Schema({
 	desc: { required: true, type: String },
 	img_url: String,
 	img_public_id: String,
-	price_usd: { type: Number, required: true, default: 0 },
+	price_usd: { type: Number, required: true, default: 0, min: 0 },
 	hardware_type: {
 		required: true,
 		ref: "HardwareType",
 		type: mongoose.Schema.Types.ObjectId,
 	},
-	number_in_stock: { type: Number, required: true, default: 1, min: 1 },
+	number_in_stock: { type: Number, required: true, default: 0, min: 0 },
 });
 
 HardwareSchema.virtual("route_url").get(function () {
