@@ -11,7 +11,7 @@ const {
 	EDIT_HARDWARE_TYPE_PAGE,
 	DELETE_HARDWARE_TYPE_PAGE,
 	createHardwareTypeFormValidationChain,
-	deleteImageInCloudinary,
+	deleteImageFromCloudinary,
 	deleteImagesFromCloudinary,
 } = require("../utilities/helpers.js");
 const cloudinary = require("../utilities/cloudinary");
@@ -85,7 +85,7 @@ exports.create_hardware_type_post = [
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteImageInCloudinary(img_file.filename);
+				await deleteImageFromCloudinary(img_file.filename);
 			}
 
 			res.render(CREATE_HARDWARE_TYPE_PAGE, {
@@ -165,7 +165,7 @@ exports.edit_hardware_type_post = [
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteImageInCloudinary(img_file.filename);
+				await deleteImageFromCloudinary(img_file.filename);
 			}
 
 			res.render(EDIT_HARDWARE_TYPE_PAGE, {
@@ -188,7 +188,7 @@ exports.edit_hardware_type_post = [
 				oldHardwareTypeData.img_public_id !== undefined;
 
 			if (hasPreviousImage) {
-				await deleteImageInCloudinary(oldHardwareTypeData.img_public_id);
+				await deleteImageFromCloudinary(oldHardwareTypeData.img_public_id);
 			}
 			res.redirect(hardwareType.route_url);
 		}
@@ -248,7 +248,7 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 		// Transaction completes with no error, delete image for the now deleted hardware_type
 		// Delete hardware images that are under the deleted hardware type
 		if (hasImage) {
-			await deleteImageInCloudinary(imgPublicID);
+			await deleteImageFromCloudinary(imgPublicID);
 			await deleteImagesFromCloudinary(hardwareImages);
 		}
 		res.redirect("/");

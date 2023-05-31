@@ -16,7 +16,7 @@ exports.HARDWARE_DETAILS_PAGE = "hardware_details";
 exports.EDIT_HARDWARE_PAGE = "edit_hardware_form";
 exports.DELETE_HARDWARE_PAGE = "delete_hardware_form";
 
-function deleteImageInCloudinary(image_public_id) {
+function deleteImageFromCloudinary(image_public_id) {
 	return cloudinary.uploader.destroy(image_public_id, {
 		invalidate: true,
 	});
@@ -24,11 +24,11 @@ function deleteImageInCloudinary(image_public_id) {
 
 async function deleteImagesFromCloudinary(image_public_ids) {
 	for (public_id of image_public_ids) {
-		await deleteImageInCloudinary(public_id);
+		await deleteImageFromCloudinary(public_id);
 	}
 }
 
-exports.deleteImageInCloudinary = deleteImageInCloudinary;
+exports.deleteImageFromCloudinary = deleteImageFromCloudinary;
 exports.deleteImagesFromCloudinary = deleteImagesFromCloudinary;
 
 // Given a file, isValidImage checks if the file is an image file and returns a boolean
@@ -54,7 +54,7 @@ function createImageValidationChain(field) {
 			const validationData = await isValidImage(image_data);
 			if (validationData.isValid === false) {
 				// Delete uploaded file if its not really an image.
-				await deleteImageInCloudinary(image_data.filename);
+				await deleteImageFromCloudinary(image_data.filename);
 				throw new Error(validationData.errorMessage);
 			}
 		});

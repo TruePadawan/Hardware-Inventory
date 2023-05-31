@@ -7,7 +7,7 @@ const {
 	HARDWARE_DETAILS_PAGE,
 	EDIT_HARDWARE_PAGE,
 	DELETE_HARDWARE_PAGE,
-	deleteImageInCloudinary,
+	deleteImageFromCloudinary,
 } = require("../utilities/helpers.js");
 const multer = require("multer");
 const { body, validationResult } = require("express-validator");
@@ -61,7 +61,7 @@ exports.create_hardware_post = [
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteImageInCloudinary(img_file.filename);
+				await deleteImageFromCloudinary(img_file.filename);
 			}
 			res.render(ADD_HARDWARE_PAGE, {
 				title: "Add Hardware",
@@ -140,7 +140,7 @@ exports.edit_hardware_post = [
 		if (errors.isEmpty() === false) {
 			// Delete any uploaded image if any error occurs with form validation
 			if (img_file) {
-				await deleteImageInCloudinary(img_file.filename);
+				await deleteImageFromCloudinary(img_file.filename);
 			}
 
 			// else re-render form with user input
@@ -165,7 +165,7 @@ exports.edit_hardware_post = [
 				oldHardwareData.img_public_id !== undefined;
 
 			if (hasPreviousImage) {
-				await deleteImageInCloudinary(oldHardwareData.img_public_id);
+				await deleteImageFromCloudinary(oldHardwareData.img_public_id);
 			}
 			res.redirect(hardware.route_url);
 		}
@@ -194,7 +194,7 @@ exports.delete_hardware_post = asyncHandler(async function (req, res) {
 
 		// delete image if any
 		if (hasImage) {
-			await deleteImageInCloudinary(hardware.img_public_id);
+			await deleteImageFromCloudinary(hardware.img_public_id);
 		}
 		res.redirect(hardware.hardware_type.route_url);
 	}
