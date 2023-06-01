@@ -3,7 +3,8 @@
 ![image](https://github.com/TruePadawan/Hardware-Inventory/assets/71678062/7b8d2fbb-ec39-43e3-b788-b481cdb42bba)
 
 **Hardware Inventory** is a simple CRUD web-application I built to practice working with server-side technologies, NodeJS + ExpressJS to be exact.  
-It's provides an interface for creating lists of hardwares which are group based on the type of hardware. My goal was mainly to get comfortable with Node and ExpressJS and how they work with other server-side tools.
+It's provides an interface for creating lists of hardwares which are group based on the type of hardware.  
+My goal was mainly to get comfortable with Node and ExpressJS and see how they work with other server-side tools.
 
 ## Stack
 
