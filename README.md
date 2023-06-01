@@ -1,4 +1,4 @@
-# ![Hardware-Inventory](https://hardware-inventory-production.up.railway.app/hardware_types)
+# [Hardware-Inventory](https://hardware-inventory-production.up.railway.app/hardware_types)
 
 ![image](https://github.com/TruePadawan/Hardware-Inventory/assets/71678062/7b8d2fbb-ec39-43e3-b788-b481cdb42bba)
 
