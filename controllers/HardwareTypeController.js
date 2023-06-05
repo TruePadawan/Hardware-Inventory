@@ -241,8 +241,6 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 			imgPublicID = hardwareType.img_public_id;
 			await HardwareType.findByIdAndRemove(hardwareTypeID, { session }).exec();
 		});
-
-		await session.commitTransaction();
 		await session.endSession();
 		// Transaction completes with no error, delete image for the now deleted hardware_type
 		// Delete hardware images that are under the deleted hardware type
@@ -252,7 +250,6 @@ exports.delete_hardware_type_post = asyncHandler(async function (req, res) {
 		}
 		res.redirect("/");
 	} catch (error) {
-		await session.abortTransaction();
 		await session.endSession();
 		throw error;
 	}
