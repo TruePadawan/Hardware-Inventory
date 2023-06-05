@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const HardwareType = require("../models/HardwareType");
 const {
 	ADD_HARDWARE_PAGE,
-	PUBLIC_DIR,
 	createHardwareFormValidationChain,
 	HARDWARE_DETAILS_PAGE,
 	EDIT_HARDWARE_PAGE,

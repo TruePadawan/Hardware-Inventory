@@ -2,8 +2,6 @@ const { normalize } = require("node:path");
 const { body } = require("express-validator");
 const HardwareType = require("../models/HardwareType");
 const cloudinary = require("./cloudinary");
-// Path to the /public/ directory
-exports.PUBLIC_DIR = normalize(`${__dirname}/../public`);
 
 // Names of template files
 exports.INDEX_PAGE = "index";
