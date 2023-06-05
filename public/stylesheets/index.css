@@ -79,11 +79,9 @@ body {
 @media screen and (min-width: 768px) {
     .hardware-type-item.has-image img {
         transition: scale 0.5s;
-        filter: blur(1.2px);
     }
 
     .hardware-type-item.has-image:hover img {
-        filter: none;
         scale: 1.2;
     }
 }
